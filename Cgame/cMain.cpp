@@ -1,18 +1,23 @@
 #include <stdio.h>
-#include <Windows.h> // WIN32 API
+#include <Windows.h>
 
 int main()
 {
-	//초기화
+	COORD pos;
+	pos.X = 10;
+	pos.Y = 10;
+
 
 	while (true)
 	{
-		system("cls"); // 화면 지워주고
+		system("cls");
 
-		//코드 작성
+		pos.X++;
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+
 		printf("Hello world");
 
-		Sleep(50); // 잠시 멈춤
+		Sleep(50);
 	}
 
 	return 0;
