@@ -9,6 +9,15 @@ struct Obj
 
 };
 
+void SetPosition(int x, int y)
+{
+	COORD pos;
+	pos.X = x;
+	pos.Y = y;
+
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
+
 int main()
 {
 	Obj obj;
@@ -16,17 +25,20 @@ int main()
 	obj.y = 10;
 	obj.shape = "Hello world";
 
+	Obj obj2;
+	obj2.x = 20;
+	obj2.y = 20;
+	obj2.shape = "Hello world2";
+
 	while (true)
 	{
 		system("cls");
 
-		COORD pos;
-		pos.X = obj.x;
-		pos.Y = obj.y;
-
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
-
+		SetPosition(obj.x , obj.y);
 		printf(obj.shape);
+
+		SetPosition(obj2.x, obj2.y);
+		printf(obj2.shape);
 
 		Sleep(50);
 	}
