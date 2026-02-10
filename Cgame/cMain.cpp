@@ -12,7 +12,7 @@ struct Obj
 void SetPosition(int x, int y)
 {
 	COORD pos;
-	pos.X = x;
+	pos.X = x * 2;
 	pos.Y = y;
 
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
@@ -23,12 +23,12 @@ int main()
 	Obj obj;
 	obj.x = 10;
 	obj.y = 10;
-	obj.shape = "Hello world";
+	obj.shape = "бс";
 
 	Obj obj2;
 	obj2.x = 20;
 	obj2.y = 20;
-	obj2.shape = "Hello world2";
+	obj2.shape = "б▄";
 
 	while (true)
 	{
