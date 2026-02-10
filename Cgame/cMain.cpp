@@ -36,6 +36,11 @@ void SetPosition(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
+void SetTextColor(int color)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
 int main()
 {
 	Obj obj;
@@ -51,43 +56,21 @@ int main()
 	while (true)
 	{
 		system("cls");
-
-		//GetAsyncKeyState
-		//Get : 가져오다
-		//A(not)sync : 비동기된
-		//Key : 키
-		//State : 상태
-		//VK_LEFT
-		//VK : virtual key 가상키
-		//LEFT : 왼쪽
 		if (GetAsyncKeyState(0x25))
 		{
 			obj.x--;
 		}
-
-		//VK_RIGHT
-		//VK : virtual key 가상키
-		//RIGHT : 오른쪽
 		if (GetAsyncKeyState(0x27))
 		{
 			obj.x++;
 		}
 
 		SetPosition(obj.x , obj.y);
-
-
-		//SetConsoleTextAttribute
-		//Set : 값을 넣어주다
-		//Console : 콘솔창
-		//Text : 문자
-		//Attribute : 속성
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Blue);
-
+		SetTextColor(Blue);
 		printf(obj.shape);
 
 		SetPosition(obj2.x, obj2.y);
-
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Yellow);
+		SetTextColor(Yellow);
 		printf(obj2.shape);
 
 		Sleep(50);
