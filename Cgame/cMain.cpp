@@ -34,6 +34,27 @@ int main()
 	{
 		system("cls");
 
+		//GetAsyncKeyState
+		//Get : 가져오다
+		//A(not)sync : 비동기된
+		//Key : 키
+		//State : 상태
+		//VK_LEFT
+		//VK : virtual key 가상키
+		//LEFT : 왼쪽
+		if (GetAsyncKeyState(0x25))
+		{
+			obj.x--;
+		}
+
+		//VK_RIGHT
+		//VK : virtual key 가상키
+		//RIGHT : 오른쪽
+		if (GetAsyncKeyState(0x27))
+		{
+			obj.x++;
+		}
+
 		SetPosition(obj.x , obj.y);
 		printf(obj.shape);
 
