@@ -1,6 +1,24 @@
 #include <stdio.h>
 #include <Windows.h>
 
+#define Black		0
+#define DarkBlue	1
+#define DarkGreen	2
+#define DarkCyan	3
+#define DarkRed		4
+#define DarkMagenta	5
+#define DarkYellow	6
+#define Gray		7
+#define DarkGray	8
+#define Blue		9
+#define Green		10
+#define Cyan		11
+#define Red			12
+#define Magenta		13
+#define Yellow		14
+#define White		15
+
+
 struct Obj
 {		  
 	int x;
@@ -56,9 +74,20 @@ int main()
 		}
 
 		SetPosition(obj.x , obj.y);
+
+
+		//SetConsoleTextAttribute
+		//Set : 값을 넣어주다
+		//Console : 콘솔창
+		//Text : 문자
+		//Attribute : 속성
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Blue);
+
 		printf(obj.shape);
 
 		SetPosition(obj2.x, obj2.y);
+
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Yellow);
 		printf(obj2.shape);
 
 		Sleep(50);
