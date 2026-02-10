@@ -1,21 +1,32 @@
 #include <stdio.h>
 #include <Windows.h>
 
+struct Obj
+{		  
+	int x;
+	int y;
+	const char* shape;
+
+};
+
 int main()
 {
-	COORD pos;
-	pos.X = 10;
-	pos.Y = 10;
-
+	Obj obj;
+	obj.x = 10;
+	obj.y = 10;
+	obj.shape = "Hello world";
 
 	while (true)
 	{
 		system("cls");
 
-		pos.X++;
+		COORD pos;
+		pos.X = obj.x;
+		pos.Y = obj.y;
+
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 
-		printf("Hello world");
+		printf(obj.shape);
 
 		Sleep(50);
 	}
