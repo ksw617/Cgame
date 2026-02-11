@@ -57,6 +57,7 @@ void MakeInvisible();
 
 Obj* player;
 Obj* enemy;
+int heart;
 
 void Init();
 void Progress();
@@ -112,7 +113,7 @@ void MakeInvisible()
 #pragma region GAME
 void Init()
 {
-
+	heart = 3;
 	srand((unsigned)time(NULL));
 
 	player = (Obj*)malloc(sizeof(Obj));
@@ -123,9 +124,9 @@ void Init()
 
 	enemy = (Obj*)malloc(sizeof(Obj));
 	enemy->x = rand() % 30;
-	enemy->y = rand() % 30;
+	enemy->y = rand() % 30 + 1;
 	enemy->color = Red;
-	enemy->shape = "¡Ü";
+	enemy->shape = "¢¾";
 }
 void Progress()
 {
@@ -151,7 +152,8 @@ void Progress()
 	if (player->x == enemy->x && player->y == enemy->y)
 	{
 		enemy->x = rand() % 30;
-		enemy->y = rand() % 30;
+		enemy->y = rand() % 30 + 1;
+		heart++;
 	}
 
 	Dir randDir = (Dir)(rand() % 4);
@@ -184,6 +186,13 @@ void Render()
 	SetPosition(enemy->x, enemy->y);
 	SetTextColor(enemy->color);
 	printf(enemy->shape);
+
+	for (int i = 0; i < heart; i++)
+	{
+		SetPosition(i, 0);
+		SetTextColor(Red);
+		printf("¢¾");
+	}
 }
 #pragma endregion
 
