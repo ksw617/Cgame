@@ -32,6 +32,7 @@ struct Obj
 {
 	int x;
 	int y;
+	Color color;
 	const char* shape;
 
 };
@@ -45,8 +46,8 @@ void MakeInvisible();
 
 #pragma region GAME
 
-Obj obj;
-Obj obj2;
+Obj* player;
+Obj* enemy;
 
 void Init();
 void Input();
@@ -103,35 +104,49 @@ void MakeInvisible()
 void Init()
 {
 
-	obj.x = 10;
-	obj.y = 10;
-	obj.shape = "бс";
+	player = (Obj*)malloc(sizeof(Obj));
+	player->x = 10;
+	player->y = 10;
+	player->color = Blue;
+	player->shape = "бс";
 
-	
-	obj2.x = 20;
-	obj2.y = 20;
-	obj2.shape = "б▄";
+	enemy = (Obj*)malloc(sizeof(Obj));
+	enemy->x = rand() % 20;
+	enemy->y = rand() % 20;
+	enemy->color = Red;
+	enemy->shape = "б▄";
 }
 void Input()
 {
-	if (GetAsyncKeyState(0x25))
+	if (GetAsyncKeyState(VK_LEFT))
 	{
-		obj.x--;
+		player->x--;
 	}
-	if (GetAsyncKeyState(0x27))
+	if (GetAsyncKeyState(VK_RIGHT))
 	{
-		obj.x++;
+		player->x++;
 	}
+
+	if (GetAsyncKeyState(VK_UP))
+	{
+		player->y--;
+	}
+
+	if (GetAsyncKeyState(VK_DOWN))
+	{
+		player->y++;
+	}
+
 }
 void Render()
 {
-	SetPosition(obj.x, obj.y);
-	SetTextColor(Blue);
-	printf(obj.shape);
+	SetPosition(player->x, player->y);
+	SetTextColor(player->color);
+	printf(player->shape);
 
-	SetPosition(obj2.x, obj2.y);
-	SetTextColor(Yellow);
-	printf(obj2.shape);
+	SetPosition(enemy->x, enemy->y);
+	SetTextColor(enemy->color);
+	printf(enemy->shape);
 }
 #pragma endregion
 
