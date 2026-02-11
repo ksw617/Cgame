@@ -43,6 +43,26 @@ void SetTextColor(int color)
 
 int main()
 {
+	//CONSOLE_CURSOR_INFO
+	//CONSOLE : 콘솔창
+	//CURSOR : 커서
+	//INFO : 정보
+	CONSOLE_CURSOR_INFO info;
+	//bVisible
+	//b : bool
+	//visible : 보이냐 마냐
+	info.bVisible = false;
+	//dw : DWORD 4byte 짜리 자료형
+	//Size : 크기
+	info.dwSize = 1;
+	//SetConsoleCursorInfo
+	//Set : 값을 넣어주다
+	//Console : 콘솔창
+	//Cursor : 커서
+	//Info : 정보
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
+
+
 	Obj obj;
 	obj.x = 10;
 	obj.y = 10;
