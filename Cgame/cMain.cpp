@@ -29,27 +29,10 @@ struct Obj
 
 };
 
-void SetPosition(int x, int y)
-{
-	COORD pos;
-	pos.X = x * 2;
-	pos.Y = y;
+void SetPosition(int x, int y);
+void SetTextColor(Color color);
+void MakeInvisible();
 
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
-}
-
-void SetTextColor(Color color)
-{
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
-}
-
-void MakeInvisible()
-{
-	CONSOLE_CURSOR_INFO info;
-	info.bVisible = false;
-	info.dwSize = 1;
-	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
-}
 
 int main()
 {
@@ -90,4 +73,26 @@ int main()
 	}
 
 	return 0;
+} 
+
+void SetPosition(int x, int y)
+{
+	COORD pos;
+	pos.X = x * 2;
+	pos.Y = y;
+
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
+
+void SetTextColor(Color color)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
+void MakeInvisible()
+{
+	CONSOLE_CURSOR_INFO info;
+	info.bVisible = false;
+	info.dwSize = 1;
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
 }
