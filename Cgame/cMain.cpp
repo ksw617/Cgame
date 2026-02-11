@@ -41,27 +41,18 @@ void SetTextColor(int color)
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
+void MakeInvisible()
+{
+	CONSOLE_CURSOR_INFO info;
+	info.bVisible = false;
+	info.dwSize = 1;
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
+}
+
 int main()
 {
-	//CONSOLE_CURSOR_INFO
-	//CONSOLE : 콘솔창
-	//CURSOR : 커서
-	//INFO : 정보
-	CONSOLE_CURSOR_INFO info;
-	//bVisible
-	//b : bool
-	//visible : 보이냐 마냐
-	info.bVisible = false;
-	//dw : DWORD 4byte 짜리 자료형
-	//Size : 크기
-	info.dwSize = 1;
-	//SetConsoleCursorInfo
-	//Set : 값을 넣어주다
-	//Console : 콘솔창
-	//Cursor : 커서
-	//Info : 정보
-	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
 
+	MakeInvisible();
 
 	Obj obj;
 	obj.x = 10;
