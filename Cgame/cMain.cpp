@@ -1,6 +1,9 @@
+#pragma region Header
 #include <stdio.h>
 #include <Windows.h>
+#pragma endregion
 
+#pragma region Enum
 enum Color
 {
 	Black,
@@ -21,18 +24,24 @@ enum Color
 	White,
 };
 
+#pragma endregion
+
+#pragma region ±¸Á¶Ã¼
+
 struct Obj
-{		  
+{
 	int x;
 	int y;
 	const char* shape;
 
 };
+#pragma endregion
 
+#pragma region WIN_API
 void SetPosition(int x, int y);
 void SetTextColor(Color color);
 void MakeInvisible();
-
+#pragma endregion
 
 int main()
 {
@@ -75,6 +84,7 @@ int main()
 	return 0;
 } 
 
+#pragma region WIN_API
 void SetPosition(int x, int y)
 {
 	COORD pos;
@@ -96,3 +106,5 @@ void MakeInvisible()
 	info.dwSize = 1;
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
 }
+#pragma endregion
+
