@@ -50,7 +50,7 @@ Obj* player;
 Obj* enemy;
 
 void Init();
-void Input();
+void Progress();
 void Render();
 
 #pragma endregion
@@ -66,7 +66,7 @@ int main()
 	{
 		system("cls");
 
-		Input();
+		Progress();
 		Render();
 
 		Sleep(50);
@@ -116,7 +116,7 @@ void Init()
 	enemy->color = Red;
 	enemy->shape = "¡Ü";
 }
-void Input()
+void Progress()
 {
 	if (GetAsyncKeyState(VK_LEFT))
 	{
