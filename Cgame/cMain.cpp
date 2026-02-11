@@ -111,8 +111,8 @@ void Init()
 	player->shape = "¡á";
 
 	enemy = (Obj*)malloc(sizeof(Obj));
-	enemy->x = rand() % 20;
-	enemy->y = rand() % 20;
+	enemy->x = rand() % 30;
+	enemy->y = rand() % 30;
 	enemy->color = Red;
 	enemy->shape = "¡Ü";
 }
@@ -135,6 +135,12 @@ void Progress()
 	if (GetAsyncKeyState(VK_DOWN))
 	{
 		player->y++;
+	}
+
+	if (player->x == enemy->x && player->y == enemy->y)
+	{
+		enemy->x = rand() % 30;
+		enemy->y = rand() % 30;
 	}
 
 }
