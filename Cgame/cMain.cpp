@@ -43,40 +43,30 @@ void SetTextColor(Color color);
 void MakeInvisible();
 #pragma endregion
 
+#pragma region GAME
+
+Obj obj;
+Obj obj2;
+
+void Init();
+void Input();
+void Render();
+
+#pragma endregion
+
+
 int main()
 {
 
 	MakeInvisible();
-
-	Obj obj;
-	obj.x = 10;
-	obj.y = 10;
-	obj.shape = "бс";
-
-	Obj obj2;
-	obj2.x = 20;
-	obj2.y = 20;
-	obj2.shape = "б▄";
+	Init();
 
 	while (true)
 	{
 		system("cls");
-		if (GetAsyncKeyState(0x25))
-		{
-			obj.x--;
-		}
-		if (GetAsyncKeyState(0x27))
-		{
-			obj.x++;
-		}
 
-		SetPosition(obj.x , obj.y);
-		SetTextColor(Blue);
-		printf(obj.shape);
-
-		SetPosition(obj2.x, obj2.y);
-		SetTextColor(Yellow);
-		printf(obj2.shape);
+		Input();
+		Render();
 
 		Sleep(50);
 	}
@@ -105,6 +95,43 @@ void MakeInvisible()
 	info.bVisible = false;
 	info.dwSize = 1;
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
+}
+
+#pragma endregion
+
+#pragma region GAME
+void Init()
+{
+
+	obj.x = 10;
+	obj.y = 10;
+	obj.shape = "бс";
+
+	
+	obj2.x = 20;
+	obj2.y = 20;
+	obj2.shape = "б▄";
+}
+void Input()
+{
+	if (GetAsyncKeyState(0x25))
+	{
+		obj.x--;
+	}
+	if (GetAsyncKeyState(0x27))
+	{
+		obj.x++;
+	}
+}
+void Render()
+{
+	SetPosition(obj.x, obj.y);
+	SetTextColor(Blue);
+	printf(obj.shape);
+
+	SetPosition(obj2.x, obj2.y);
+	SetTextColor(Yellow);
+	printf(obj2.shape);
 }
 #pragma endregion
 
