@@ -1,6 +1,7 @@
 #pragma region Header
 #include <stdio.h>
 #include <Windows.h>
+#include <time.h>
 #pragma endregion
 
 #pragma region Enum
@@ -103,6 +104,8 @@ void MakeInvisible()
 #pragma region GAME
 void Init()
 {
+
+	srand((unsigned)time(NULL));
 
 	player = (Obj*)malloc(sizeof(Obj));
 	player->x = 10;
