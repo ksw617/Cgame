@@ -146,6 +146,26 @@ void Progress()
 		enemy->y = rand() % 30;
 	}
 
+	int randDir = rand() % 4;
+
+	switch (randDir)
+	{
+	case 0:
+		enemy->x--;
+		break;
+	case 1:
+		enemy->x++;
+		break;
+	case 2:
+		enemy->y--;
+		break;
+	case 3:
+		enemy->y++;
+		break;
+	default:
+		break;
+	}
+
 }
 void Render()
 {
