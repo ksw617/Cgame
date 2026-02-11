@@ -25,6 +25,14 @@ enum Color
 	White,
 };
 
+enum Dir
+{
+	Left,
+	Right,
+	Up,
+	Down
+};
+
 #pragma endregion
 
 #pragma region ±¸Á¶Ã¼
@@ -146,20 +154,20 @@ void Progress()
 		enemy->y = rand() % 30;
 	}
 
-	int randDir = rand() % 4;
+	Dir randDir = (Dir)(rand() % 4);
 
 	switch (randDir)
 	{
-	case 0:
+	case Left:
 		enemy->x--;
 		break;
-	case 1:
+	case Right:
 		enemy->x++;
 		break;
-	case 2:
+	case Up:
 		enemy->y--;
 		break;
-	case 3:
+	case Down:
 		enemy->y++;
 		break;
 	default:
