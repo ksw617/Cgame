@@ -1,23 +1,25 @@
 #include <stdio.h>
 #include <Windows.h>
 
-#define Black		0
-#define DarkBlue	1
-#define DarkGreen	2
-#define DarkCyan	3
-#define DarkRed		4
-#define DarkMagenta	5
-#define DarkYellow	6
-#define Gray		7
-#define DarkGray	8
-#define Blue		9
-#define Green		10
-#define Cyan		11
-#define Red			12
-#define Magenta		13
-#define Yellow		14
-#define White		15
-
+enum Color
+{
+	Black,
+	DarkBlue,
+	DarkGreen,
+	DarkCyan,
+	DarkRed,
+	DarkMagenta,
+	DarkYellow,
+	Gray,
+	DarkGray,
+	Blue,
+	Green,
+	Cyan,
+	Red,
+	Magenta,
+	Yellow,
+	White,
+};
 
 struct Obj
 {		  
@@ -36,7 +38,7 @@ void SetPosition(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-void SetTextColor(int color)
+void SetTextColor(Color color)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
