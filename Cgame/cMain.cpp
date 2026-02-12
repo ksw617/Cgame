@@ -25,23 +25,70 @@ void HideCursor();
 void SetTextColor(Color color);
 void SetPosition(int x, int y);
 
+struct Obj
+{
+	int x;
+	int y;
+	Color color;
+	const char* shape;
+};
 
+#define BulletCount 10
 
 int main()
 {
-	int x = 10;
-	int y = 10;
-	Color color = Yellow;
-	const char* shape = "Hello world";
+	Obj player;
+	player.x = 10;
+	player.y = 10;
+	player.color = Yellow;
+	player.shape = "бс";
+
+	Obj bullets[BulletCount];
+	for (int i = 0; i < BulletCount; i++)
+	{
+		bullets[i].x = i;
+		bullets[i].y = 0;
+		bullets[i].color = Blue;
+		bullets[i].shape = "б▄";
+	}
+
+	
+	
+	
 	HideCursor();
 
 	while (true)
 	{
 		system("cls");
 
-		SetTextColor(color);
-		SetPosition(x, y);
-		printf(shape);
+		if (GetAsyncKeyState(VK_LEFT))
+		{
+			player.x--;
+		}
+		if (GetAsyncKeyState(VK_RIGHT))
+		{
+			player.x++;
+		}
+		if (GetAsyncKeyState(VK_UP))
+		{			   
+			player.y--;
+		}
+		if (GetAsyncKeyState(VK_DOWN))
+		{
+			player.y++;
+		}
+
+
+		SetTextColor(player.color);
+		SetPosition(player.x, player.y);
+		printf(player.shape);
+
+		for (int i = 0; i < BulletCount; i++)
+		{
+			SetTextColor(bullets[i].color);
+			SetPosition(bullets[i].x, bullets[i].y);
+			printf(bullets[i].shape);
+		}
 
 		Sleep(50);
 	}
