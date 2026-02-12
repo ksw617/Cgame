@@ -50,7 +50,7 @@ struct Obj
 #pragma region WIN_API
 void SetPosition(int x, int y);
 void SetTextColor(Color color);
-void MakeInvisible();
+void HideCursor();
 #pragma endregion
 
 #pragma region GAME
@@ -69,7 +69,7 @@ void Render();
 int main()
 {
 
-	MakeInvisible();
+	HideCursor();
 	Init();
 
 	while (true)
@@ -100,7 +100,7 @@ void SetTextColor(Color color)
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
-void MakeInvisible()
+void HideCursor()
 {
 	CONSOLE_CURSOR_INFO info;
 	info.bVisible = false;
