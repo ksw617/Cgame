@@ -108,6 +108,13 @@ int main()
 			if (bullets[i].act)
 			{
 				bullets[i].x++;
+				if (bullets[i].x >= 40)
+				{
+					bullets[i].x = i;
+					bullets[i].y = 0;
+					bullets[i].color = Blue;
+					bullets[i].act = false;
+				}
 			}
 		}
 
