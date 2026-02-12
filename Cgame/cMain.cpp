@@ -102,6 +102,15 @@ int main()
 		SetPosition(player.x, player.y);
 		printf(player.shape);
 
+
+		for (int i = 0; i < BulletCount; i++)
+		{
+			if (bullets[i].act)
+			{
+				bullets[i].x++;
+			}
+		}
+
 		for (int i = 0; i < BulletCount; i++)
 		{
 			SetTextColor(bullets[i].color);
