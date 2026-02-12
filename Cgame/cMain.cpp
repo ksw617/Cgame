@@ -27,6 +27,7 @@ void SetPosition(int x, int y);
 
 struct Obj
 {
+	bool act;
 	int x;
 	int y;
 	Color color;
@@ -46,6 +47,7 @@ int main()
 	Obj bullets[BulletCount];
 	for (int i = 0; i < BulletCount; i++)
 	{
+		bullets[i].act = false;
 		bullets[i].x = i;
 		bullets[i].y = 0;
 		bullets[i].color = Blue;
@@ -79,9 +81,20 @@ int main()
 		}
 		if (GetAsyncKeyState(VK_SPACE))
 		{
-			bullets[0].x = player.x;
-			bullets[0].y = player.y;
-			bullets[0].color = Red;
+		
+
+			for (int i = 0; i < BulletCount; i++)
+			{
+				if (bullets[i].act == false)
+				{
+					bullets[i].x = player.x;
+					bullets[i].y = player.y;
+					bullets[i].color = Red;
+					bullets[i].act = true;
+					break;
+				}
+			
+			}
 		}
 
 
