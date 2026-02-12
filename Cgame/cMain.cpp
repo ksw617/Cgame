@@ -77,6 +77,12 @@ int main()
 		{
 			player.y++;
 		}
+		if (GetAsyncKeyState(VK_SPACE))
+		{
+			bullets[0].x = player.x;
+			bullets[0].y = player.y;
+			bullets[0].color = Red;
+		}
 
 
 		SetTextColor(player.color);
