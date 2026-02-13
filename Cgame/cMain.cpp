@@ -30,9 +30,8 @@ struct Obj
 	int x;
 	int y;
 	Color color;
-	const char* shape1;
-	const char* shape2;
-	const char* shape3;
+	const char* shape[3];
+
 };
 
 
@@ -43,9 +42,9 @@ int main()
 	obj.x = 10;
 	obj.y = 10;
 	obj.color = White;
-	obj.shape1 = "¡á¡á¡á¡á";
-	obj.shape2 = "¡á¡á¡á¡á";
-	obj.shape3 = "¡á¡á¡á¡á";
+	obj.shape[0] = "¡á¡á¡á¡á";
+	obj.shape[1] = "¡á¡á¡á¡á";
+	obj.shape[2] = "¡á¡á¡á¡á";
 
 	HideCursor();
 
@@ -55,11 +54,11 @@ int main()
 
 		SetTextColor(obj.color);
 		SetPosition(obj.x, obj.y);
-		printf(obj.shape1);
+		printf(obj.shape[0]);
 		SetPosition(obj.x, obj.y + 1);
-		printf(obj.shape2);
-		SetPosition(obj.x, obj.y +2);
-		printf(obj.shape3);
+		printf(obj.shape[1]);
+		SetPosition(obj.x, obj.y + 2);
+		printf(obj.shape[2]);
 
 		Sleep(50);
 	}
