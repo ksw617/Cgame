@@ -27,6 +27,7 @@ void SetPosition(int x, int y);
 
 struct Obj
 {
+	int aniIndex;
 	int x;
 	int y;
 	Color color;
@@ -39,6 +40,7 @@ struct Obj
 int main()
 {
 	Obj obj;
+	obj.aniIndex = 0;
 	obj.x = 10;
 	obj.y = 10;
 	obj.color = White;
@@ -101,14 +103,21 @@ int main()
 			obj.y++;
 		}
 
+		obj.aniIndex++;
+
+		if (obj.aniIndex >= 8)
+		{
+			obj.aniIndex = 0;
+		}
+
 		SetTextColor(obj.color);
 		for (int i = 0; i < 3; i++)
 		{
 			SetPosition(obj.x, obj.y + i);
-			printf(obj.shape[1][i]);
+			printf(obj.shape[obj.aniIndex][i]);
 		}
 
-		Sleep(50);
+		Sleep(20);
 	}
 
 	return 0;
