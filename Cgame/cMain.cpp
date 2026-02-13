@@ -30,7 +30,7 @@ struct Obj
 	int x;
 	int y;
 	Color color;
-	const char* shape[3];
+	const char* shape[8][3];
 
 };
 
@@ -42,9 +42,38 @@ int main()
 	obj.x = 10;
 	obj.y = 10;
 	obj.color = White;
-	obj.shape[0] = "   -----|-----";
-	obj.shape[1] = "*>=====[_]L)";
-	obj.shape[2] = "      -'-`-";
+	obj.shape[0][0] = "   -----|-----";
+	obj.shape[0][1] = "*>=====[_]L)";
+	obj.shape[0][2] = "      -'-`-";
+
+	obj.shape[1][0] = "    ----|----";
+	obj.shape[1][1] = "*>=====[_]L)";
+	obj.shape[1][2] = "      -'-`-";
+
+	obj.shape[2][0] = "     ---|---";
+	obj.shape[2][1] = "*>=====[_]L)";
+	obj.shape[2][2] = "      -'-`-";
+
+	obj.shape[3][0] = "      --|--";
+	obj.shape[3][1] = "*>=====[_]L)";
+	obj.shape[3][2] = "      -'-`-";
+
+	obj.shape[4][0] = "       -|-";
+	obj.shape[4][1] = "*>=====[_]L)";
+	obj.shape[4][2] = "      -'-`-";
+
+	obj.shape[5][0] = "      --|--";
+	obj.shape[5][1] = "*>=====[_]L)";
+	obj.shape[5][2] = "      -'-`-";
+
+	obj.shape[6][0] = "     ---|---";
+	obj.shape[6][1] = "*>=====[_]L)";
+	obj.shape[6][2] = "      -'-`-";
+
+	obj.shape[7][0] = "    ----|----";
+	obj.shape[7][1] = "*>=====[_]L)";
+	obj.shape[7][2] = "      -'-`-";
+
 
 	HideCursor();
 
@@ -76,7 +105,7 @@ int main()
 		for (int i = 0; i < 3; i++)
 		{
 			SetPosition(obj.x, obj.y + i);
-			printf(obj.shape[i]);
+			printf(obj.shape[1][i]);
 		}
 
 		Sleep(50);
