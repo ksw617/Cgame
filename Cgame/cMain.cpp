@@ -25,23 +25,36 @@ void HideCursor();
 void SetTextColor(Color color);
 void SetPosition(int x, int y);
 
-
+struct Obj
+{
+	int x;
+	int y;
+	Color color;
+	const char* shape1;
+	const char* shape2;
+};
 
 
 
 int main()
 {
-	
+	Obj obj;
+	obj.x = 10;
+	obj.y = 10;
+	obj.color = White;
+	obj.shape1 = "¡á¡á¡á¡á";
+	obj.shape2 = "¡á¡á¡á¡á";
+
 	HideCursor();
 
 	while (true)
 	{
 		system("cls");
 
-		SetTextColor(White);
-		SetPosition(10, 10);
-		printf("Hello world");
-
+		SetTextColor(obj.color);
+		SetPosition(obj.x, obj.y);
+		printf(obj.shape1);
+		printf(obj.shape2);
 
 		Sleep(50);
 	}
