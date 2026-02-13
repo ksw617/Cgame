@@ -42,9 +42,9 @@ int main()
 	obj.x = 10;
 	obj.y = 10;
 	obj.color = White;
-	obj.shape[0] = "¡á¡á¡á¡á";
-	obj.shape[1] = "¡á¡á¡á¡á";
-	obj.shape[2] = "¡á¡á¡á¡á";
+	obj.shape[0] = "   -----|-----";
+	obj.shape[1] = "*>=====[_]L)";
+	obj.shape[2] = "      -'-`-";
 
 	HideCursor();
 
@@ -52,13 +52,32 @@ int main()
 	{
 		system("cls");
 
+		if (GetAsyncKeyState(VK_LEFT))
+		{
+			obj.x--;
+		}
+
+		if (GetAsyncKeyState(VK_RIGHT))
+		{
+			obj.x++;
+		}
+
+		if (GetAsyncKeyState(VK_UP))
+		{
+			obj.y--;
+		}
+
+		if (GetAsyncKeyState(VK_DOWN))
+		{
+			obj.y++;
+		}
+
 		SetTextColor(obj.color);
-		SetPosition(obj.x, obj.y);
-		printf(obj.shape[0]);
-		SetPosition(obj.x, obj.y + 1);
-		printf(obj.shape[1]);
-		SetPosition(obj.x, obj.y + 2);
-		printf(obj.shape[2]);
+		for (int i = 0; i < 3; i++)
+		{
+			SetPosition(obj.x, obj.y + i);
+			printf(obj.shape[i]);
+		}
 
 		Sleep(50);
 	}
