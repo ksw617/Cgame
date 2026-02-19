@@ -21,28 +21,47 @@ enum Color
 	White,
 };
 
-void HideCursor();
-void SetTextColor(Color color);
-void SetPosition(int x, int y);
 
 #define HEIGHT 3
 #define WIDTH 4
 
+struct Rect
+{
+	short left;
+	short right;
+	short top;
+	short bottom;
+};
+
 struct Obj
 {
-	int x; 
+	int x;
 	int y;
+	Rect rect;
 	Color color;
 	const char* shape[3];
 
 };
 
 
+void HideCursor();
+void SetTextColor(Color color);
+void SetPosition(int x, int y);
+
+void SetRect(Obj& obj);
+
+bool IsCollision(int aX, int aY, int bX, int bY);
+bool IsCollision(Rect rect, int x, int y);
+bool IsCollision(Rect a, Rect b);
+
+
 int main()
 {
+
 	Obj a;
 	a.x = 10;
 	a.y = 10;
+	SetRect(a);
 	a.color = Blue;
 	a.shape[0] = "¡á¡á¡á¡á";
 	a.shape[1] = "¡á¡á¡á¡á";
@@ -51,6 +70,7 @@ int main()
 	Obj b;
 	b.x = rand() % 35;
 	b.y = rand() % 35;
+	SetRect(b);
 	b.color = Red;
 	b.shape[0] = "¡á¡á¡á¡á";
 	b.shape[1] = "¡á¡á¡á¡á";
@@ -81,12 +101,8 @@ int main()
 			a.y++;
 		}
 
-		if (a.x < b.x + WIDTH  && b.x < a.x + WIDTH &&
-			a.y < b.y + HEIGHT && b.y < a.y + HEIGHT)
-		{
-			b.x = rand() % 35;
-			b.y = rand() % 35;
-		}
+		SetRect(a);
+		SetRect(b);
 
 		for (int i = 0; i < 3; i++)
 		{
@@ -108,6 +124,34 @@ int main()
 	return 0;
 }
 
+bool IsCollision(int aX, int aY, int bX, int bY)
+{
+	if (aX == bX && aY == bY)
+		return true;
+
+	return false;
+}
+
+bool IsCollision(Rect rect, int x, int y)
+{
+	if (rect.left <= x && x < rect.right &&
+		rect.top <= y && y < rect.bottom)
+		return true;
+
+	return false;
+}
+
+
+
+bool IsCollision(Rect a, Rect b)
+{
+	if (a.left < b.right && b.left < a.right &&
+		a.top < b.bottom && b.top < a.bottom)
+		return true;
+
+	return false;
+}
+
 void SetPosition(int x, int y)
 {
 	COORD pos;
@@ -116,6 +160,16 @@ void SetPosition(int x, int y)
 
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
+
+void SetRect(Obj& obj)
+{
+	obj.rect.left = obj.x;
+	obj.rect.right = obj.x + WIDTH;
+	obj.rect.top = obj.y;
+	obj.rect.bottom = obj.y + HEIGHT;
+}
+
+
 
 void SetTextColor(Color color)
 {
