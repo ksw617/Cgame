@@ -25,6 +25,9 @@ void HideCursor();
 void SetTextColor(Color color);
 void SetPosition(int x, int y);
 
+#define HEIGHT 3
+#define WIDTH 4
+
 struct Obj
 {
 	int x; 
@@ -76,7 +79,8 @@ int main()
 			a.y++;
 		}
 
-		if (a.x == b.x && a.y == b.y)
+		if (a.x <= b.x && b.x < a.x + WIDTH &&
+			a.y <= b.y && b.y < a.y + HEIGHT)
 		{
 			b.x = rand() % 35;
 			b.y = rand() % 35;
