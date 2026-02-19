@@ -74,6 +74,12 @@ int main()
 			a.y++;
 		}
 
+		if (a.x == b.x && a.y == b.y)
+		{
+			b.x = rand() % 35;
+			b.y = rand() % 35;
+		}
+
 		SetTextColor(a.color);
 		SetPosition(a.x, a.y);
 		printf(a.shape);
