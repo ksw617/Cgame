@@ -81,8 +81,8 @@ int main()
 			a.y++;
 		}
 
-		if (a.x <= b.x && b.x < a.x + WIDTH &&
-			a.y <= b.y && b.y < a.y + HEIGHT)
+		if (a.x < b.x + WIDTH  && b.x < a.x + WIDTH &&
+			a.y < b.y + HEIGHT && b.y < a.y + HEIGHT)
 		{
 			b.x = rand() % 35;
 			b.y = rand() % 35;
