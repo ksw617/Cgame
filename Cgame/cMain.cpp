@@ -30,7 +30,7 @@ struct Obj
 	int x; 
 	int y;
 	Color color;
-	const char* shape;
+	const char* shape[3];
 
 };
 
@@ -41,13 +41,15 @@ int main()
 	a.x = 10;
 	a.y = 10;
 	a.color = Blue;
-	a.shape = "бс";
+	a.shape[0] = "бсбсбсбс";
+	a.shape[1] = "бсбсбсбс";
+	a.shape[2] = "бсбсбсбс";
 	
 	Obj b;
 	b.x = rand() % 35;
 	b.y = rand() % 35;
 	b.color = Red;
-	b.shape = "бс";
+	b.shape[0] = "бс";
 
 	HideCursor();
 
@@ -80,13 +82,17 @@ int main()
 			b.y = rand() % 35;
 		}
 
-		SetTextColor(a.color);
-		SetPosition(a.x, a.y);
-		printf(a.shape);
+		for (int i = 0; i < 3; i++)
+		{
+
+			SetTextColor(a.color);
+			SetPosition(a.x, a.y + i);
+			printf(a.shape[i]);
+		}
 
 		SetTextColor(b.color);
 		SetPosition(b.x, b.y);
-		printf(b.shape);
+		printf(b.shape[0]);
 
 		Sleep(50);
 	}
