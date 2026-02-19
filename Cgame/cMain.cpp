@@ -52,7 +52,9 @@ int main()
 	b.x = rand() % 35;
 	b.y = rand() % 35;
 	b.color = Red;
-	b.shape[0] = "¡á";
+	b.shape[0] = "¡á¡á¡á¡á";
+	b.shape[1] = "¡á¡á¡á¡á";
+	b.shape[2] = "¡á¡á¡á¡á";
 
 	HideCursor();
 
@@ -92,11 +94,13 @@ int main()
 			SetTextColor(a.color);
 			SetPosition(a.x, a.y + i);
 			printf(a.shape[i]);
+
+			SetTextColor(b.color);
+			SetPosition(b.x, b.y + i);
+			printf(b.shape[i]);
 		}
 
-		SetTextColor(b.color);
-		SetPosition(b.x, b.y);
-		printf(b.shape[0]);
+	
 
 		Sleep(50);
 	}
