@@ -100,9 +100,14 @@ int main()
 		{
 			a.y++;
 		}
-
 		SetRect(a);
 		SetRect(b);
+
+		if (IsCollision(a.rect, b.rect))
+		{
+			b.x = rand() % 35;
+			b.y = rand() % 35;
+		}
 
 		for (int i = 0; i < 3; i++)
 		{
