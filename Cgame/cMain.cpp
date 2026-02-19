@@ -55,6 +55,25 @@ int main()
 	{
 		system("cls");
 
+		if (GetAsyncKeyState(VK_LEFT))
+		{
+			a.x--;
+		}
+
+		if (GetAsyncKeyState(VK_RIGHT))
+		{
+			a.x++;
+		}
+		if (GetAsyncKeyState(VK_UP))
+		{
+			a.y--;
+		}
+
+		if (GetAsyncKeyState(VK_DOWN))
+		{
+			a.y++;
+		}
+
 		SetTextColor(a.color);
 		SetPosition(a.x, a.y);
 		printf(a.shape);
