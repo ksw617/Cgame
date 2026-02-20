@@ -234,6 +234,27 @@ void Progress()
 		break;
 	}
 
+	if (map[enemy->y][enemy->x] == 1)
+	{
+		switch (dir)
+		{
+		case LEFT:
+			enemy->x++;
+			break;
+		case RIGHT:
+			enemy->x--;
+			break;
+		case UP:
+			enemy->y++;
+			break;
+		case DOWN:
+			enemy->y--;
+			break;
+		default:
+			break;
+		}
+	}
+
 	if (map[player->y][player->x] == 2)
 	{
 		map[player->y][player->x] = 0;
