@@ -80,6 +80,41 @@ int main()
 	player->color = Yellow;
 	player->shape = "¿Ê";
 
+	Obj* enemy = (Obj*)malloc(sizeof(Obj));
+
+	//1¹ø
+	do
+	{
+		enemy->x = rand() % 18 + 1;
+		enemy->y = rand() % 18 + 1;
+
+	} while ((map[enemy->y][enemy->x] == 1);
+
+	//2¹ø
+	enemy->x = rand() % 18 + 1;
+	enemy->y = rand() % 18 + 1;
+	while (map[enemy->y][enemy->x] == 1)
+	{
+		enemy->x = rand() % 18 + 1;
+		enemy->y = rand() % 18 + 1;
+	}
+
+	//3¹ø
+	enemy->x = rand() % 18 + 1;
+	enemy->y = rand() % 18 + 1;
+	while (true)
+	{
+		enemy->x = rand() % 18 + 1;
+		enemy->y = rand() % 18 + 1;
+		if (map[enemy->y][enemy->x] != 1)
+		{
+			break;
+		}
+	}
+
+
+	enemy->color = Red;
+	enemy->shape = "º¿";
 	HideCursor();
 
 	while (true)
@@ -157,6 +192,10 @@ int main()
 		SetTextColor(player->color);
 		SetPosition(player->x, player->y);
 		printf(player->shape);
+
+		SetTextColor(enemy->color);
+		SetPosition(enemy->x, enemy->y);
+		printf(enemy->shape);
 	
 		Sleep(50);
 	}
