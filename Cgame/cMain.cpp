@@ -108,25 +108,40 @@ int main()
 		if (GetAsyncKeyState(VK_LEFT))
 		{
 			player->x--;
-
+			if (map[player->y][player->x] == 1)
+			{
+				player->x++;
+			}
 		}
 
 
 		if (GetAsyncKeyState(VK_RIGHT))
 		{
 			player->x++;
+			if (map[player->y][player->x] == 1)
+			{
+				player->x--;
+			}
 		}
 
 
 		if (GetAsyncKeyState(VK_UP))
 		{
 			player->y--;
+			if (map[player->y][player->x] == 1)
+			{
+				player->y++;
+			}
 		}
 
 
 		if (GetAsyncKeyState(VK_DOWN))
 		{
 			player->y++;
+			if (map[player->y][player->x] == 1)
+			{
+				player->y--;
+			}
 		}
 
 		SetTextColor(player->color);
