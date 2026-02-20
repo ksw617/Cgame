@@ -39,6 +39,7 @@ enum DIR
 #pragma region Struct
 struct Obj
 {
+	int hp;
 	int x;
 	int y;
 	Color color;
@@ -119,6 +120,7 @@ int main()
 void Init()
 {
 	player = (Obj*)malloc(sizeof(Obj));
+	player->hp = 3;
 	player->x = 10;
 	player->y = 10;
 	player->color = Yellow;
@@ -161,6 +163,13 @@ void Render()
 				break;
 			}
 		}
+	}
+
+	for (int i = 0; i < player->hp; i++)
+	{
+		SetTextColor(Red);
+		SetPosition(20 + i, 0);
+		printf("¢¾");
 	}
 
 	SetTextColor(player->color);
@@ -258,6 +267,17 @@ void Progress()
 	if (map[player->y][player->x] == 2)
 	{
 		map[player->y][player->x] = 0;
+		player->hp++;
+	}
+
+	if (player->x == enemy->x && player->y == enemy->y)
+	{
+		player->hp--;
+
+		if (player->hp <= 0)
+		{
+			exit(true);
+		}
 	}
 
 
