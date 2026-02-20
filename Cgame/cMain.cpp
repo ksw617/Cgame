@@ -105,6 +105,30 @@ int main()
 			}
 		}
 
+		if (GetAsyncKeyState(VK_LEFT))
+		{
+			player->x--;
+
+		}
+
+
+		if (GetAsyncKeyState(VK_RIGHT))
+		{
+			player->x++;
+		}
+
+
+		if (GetAsyncKeyState(VK_UP))
+		{
+			player->y--;
+		}
+
+
+		if (GetAsyncKeyState(VK_DOWN))
+		{
+			player->y++;
+		}
+
 		SetTextColor(player->color);
 		SetPosition(player->x, player->y);
 		printf(player->shape);
