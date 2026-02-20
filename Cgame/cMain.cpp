@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <Windows.h>
 
+#pragma region Define
+
+#define MAP_WIDTH 20
+#define MAP_HEIGHT 20
+
+#pragma endregion
 #pragma region Enum
 enum Color
 {
@@ -22,19 +28,21 @@ enum Color
 	White,
 };
 #pragma endregion
+#pragma region Struct
+struct Obj
+{
+	int x;
+	int y;
+	Color color;
+	const char* shape;
+};
+#pragma endregion
+
 #pragma region WIN_API
 void HideCursor();
 void SetTextColor(Color color);
 void SetPosition(int x, int y);
 #pragma endregion
-
-#pragma region Define
-
-#define MAP_WIDTH 20
-#define MAP_HEIGHT 20
-
-#pragma endregion
-
 
 #pragma region MAP
 int map[MAP_HEIGHT][MAP_WIDTH] =
@@ -64,9 +72,13 @@ int map[MAP_HEIGHT][MAP_WIDTH] =
 
 #pragma endregion
 
-
 int main()
 {
+	Obj* player = (Obj*)malloc(sizeof(Obj));
+	player->x = 10;
+	player->y = 10;
+	player->color = Yellow;
+	player->shape = "¿Ê";
 
 	HideCursor();
 
@@ -92,9 +104,16 @@ int main()
 				}
 			}
 		}
+
+		SetTextColor(player->color);
+		SetPosition(player->x, player->y);
+		printf(player->shape);
 	
 		Sleep(50);
 	}
+
+	free(player);
+	player = nullptr;
 
 	return 0;
 }
