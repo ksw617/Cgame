@@ -27,6 +27,14 @@ enum Color
 	Yellow,
 	White,
 };
+
+enum DIR
+{
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN,
+};
 #pragma endregion
 #pragma region Struct
 struct Obj
@@ -206,10 +214,33 @@ void Progress()
 		}
 	}
 
+	DIR dir = (DIR)(rand() % 4);
+
+	switch (dir)	
+	{
+	case LEFT:
+		enemy->x--;
+		break;
+	case RIGHT:
+		enemy->x++;
+		break;
+	case UP:
+		enemy->y--;
+		break;
+	case DOWN:
+		enemy->y++;
+		break;
+	default:
+		break;
+	}
+
 	if (map[player->y][player->x] == 2)
 	{
 		map[player->y][player->x] = 0;
 	}
+
+
+
 }
 #pragma endregion
 
