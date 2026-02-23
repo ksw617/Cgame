@@ -1,25 +1,25 @@
 #include <stdio.h>
 #include <Windows.h>
 
-#pragma region Enum
+#pragma region ENUM
 enum Color
 {
-	Black,
-	DarkBlue,
-	DarkGreen,
-	DarkCyan,
-	DarkRed,
-	DarkMagenta,
-	DarkYellow,
-	Gray,
-	DarkGray,
-	Blue,
-	Green,
-	Cyan,
-	Red,
-	Magenta,
-	Yellow,
-	White,
+	BLACK,
+	DARKBLUE,
+	DARKGREEN,
+	DARKCYAN,
+	DARKRED,
+	DARKMAGENTA,
+	DARKYELLOW,
+	GRAY,
+	DARKGRAY,
+	BLUE,
+	GREEN,
+	CYAN,
+	RED,
+	MAGENTA,
+	YELLOW,
+	WHITE,
 };
 
 #pragma endregion
@@ -29,9 +29,13 @@ void SetTextColor(Color color);
 void SetPosition(int x, int y);
 #pragma endregion
 
+#pragma region GAME
 void Logo();
 void Menu();
 void Stage();
+#pragma endregion
+
+
 
 int main()
 {
@@ -43,9 +47,7 @@ int main()
 	{
 		system("cls");
 
-		SetTextColor(White);
-		SetPosition(10, 10);
-		printf("Hello world");
+		Logo();
 	
 		Sleep(50);
 	}
@@ -53,6 +55,30 @@ int main()
 
 	return 0;
 }
+
+#pragma region GAME
+
+void Logo()
+{
+	SetTextColor(WHITE);
+	SetPosition(10, 10);
+	printf("LOGO");
+}
+
+void Menu()
+{
+	SetTextColor(WHITE);
+	SetPosition(10, 10);
+	printf("MENU");
+}
+
+void Stage()
+{
+	SetTextColor(WHITE);
+	SetPosition(10, 10);
+	printf("STAGE");
+}
+#pragma endregion
 
 
 #pragma region WIN_API
