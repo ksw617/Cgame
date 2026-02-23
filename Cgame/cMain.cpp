@@ -30,6 +30,18 @@ enum SCENE_ID
 };
 
 #pragma endregion
+
+#pragma region Struct
+struct Obj
+{
+	int x;
+	int y;
+	Color color;
+	const char* shape;
+};
+#pragma endregion
+
+
 #pragma region WIN_API
 void HideCursor();
 void SetTextColor(Color color);
@@ -38,9 +50,12 @@ void SetPosition(int x, int y);
 
 #pragma region GAME
 const char* logoImg[13];
+int timeStep = 0;
 void LogoInit();
 void LogoUpdate();
 
+const char* menuImg[7];
+Obj* menus[4];
 void MenuInit();
 void MenuUpate();
 
@@ -112,9 +127,19 @@ void LogoUpdate()
 		printf(logoImg[i]);
 	}
 
-	SetTextColor(RED);
-	SetPosition(16, 25);
-	printf("PRESSED ENTER");
+	timeStep++;
+	if (timeStep < 5)
+	{
+		SetTextColor(RED);
+		SetPosition(16, 25);
+		printf("PRESSED ENTER");
+	
+	}
+	else
+	{
+		timeStep = 0;
+	}
+
 
 	if (GetAsyncKeyState(VK_RETURN))
 	{
@@ -128,22 +153,46 @@ void LogoUpdate()
 #pragma region MENU
 void MenuInit()
 {
+	menuImg[0] = "¡á¡¡¡¡¡¡¡á¡¡¡á¡á¡á¡á¡á¡¡¡á¡¡¡¡¡¡¡á¡¡¡á¡¡¡¡¡¡¡á";
+	menuImg[1] = "¡á¡á¡¡¡á¡á¡¡¡á¡¡¡¡¡¡¡¡¡¡¡á¡á¡¡¡¡¡á¡¡¡á¡¡¡¡¡¡¡á";
+	menuImg[2] = "¡á¡¡¡á¡¡¡á¡¡¡á¡¡¡¡¡¡¡¡¡¡¡á¡¡¡á¡¡¡á¡¡¡á¡¡¡¡¡¡¡á";
+	menuImg[3] = "¡á¡¡¡¡¡¡¡á¡¡¡á¡á¡á¡á¡¡¡¡¡á¡¡¡¡¡á¡á¡¡¡á¡¡¡¡¡¡¡á";
+	menuImg[4] = "¡á¡¡¡¡¡¡¡á¡¡¡á¡¡¡¡¡¡¡¡¡¡¡á¡¡¡¡¡¡¡á¡¡¡á¡¡¡¡¡¡¡á";
+	menuImg[5] = "¡á¡¡¡¡¡¡¡á¡¡¡á¡¡¡¡¡¡¡¡¡¡¡á¡¡¡¡¡¡¡á¡¡¡á¡¡¡¡¡¡¡á";
+	menuImg[6] = "¡á¡¡¡¡¡¡¡á¡¡¡á¡á¡á¡á¡á¡¡¡á¡¡¡¡¡¡¡á¡¡¡¡¡á¡á¡á";	
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		menus[i] = (Obj*)malloc(sizeof(Obj));
+		menus[i]->x = 17;
+		menus[i]->y = 20 + i * 2;
+		menus[i]->color = WHITE;
+	}
+
+	menus[0]->shape = "START";
+	menus[1]->shape = "LOAD";
+	menus[2]->shape = "OPTION";
+	menus[3]->shape = "EXIT";
 }
 
 void MenuUpate()
 {
-	SetTextColor(WHITE);
-	SetPosition(10, 10);
-	printf("MENU");
-
-	if (GetAsyncKeyState(VK_RETURN))
+	for (int i = 0; i < 7; i++)
 	{
 		SetTextColor(YELLOW);
-		SetPosition(10, 20);
-		printf("PRESSED");
-		StageInit();
-		id = STAGE;
+		SetPosition(7, 10 + i);
+		printf(menuImg[i]);
 	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		SetTextColor(menus[i]->color);
+		SetPosition(menus[i]->x, menus[i]->y);
+		printf(menus[i]->shape);
+	}
+
+	
 }
 #pragma endregion
 
@@ -161,6 +210,8 @@ void StageUpate()
 #pragma endregion
 
 #pragma endregion
+
+
 
 
 #pragma region WIN_API
