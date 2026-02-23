@@ -37,10 +37,13 @@ void SetPosition(int x, int y);
 #pragma endregion
 
 #pragma region GAME
+const char* logoImg[13];
 void LogoInit();
 void LogoUpdate();
+
 void MenuInit();
 void MenuUpate();
+
 void StageInit();
 void StageUpate();
 #pragma endregion
@@ -85,19 +88,37 @@ int main()
 
 void LogoInit()
 {
+	 logoImg[0]  = "    ..........           @@@@@    @@@@@.......";
+	 logoImg[1]  = "     .........          @     @  @     @.......";
+	 logoImg[2]  = "      ........             @@@   @     @........";
+	 logoImg[3]  = "       .......           @@      @     @  .......";
+	 logoImg[4]  = "        ......          @@@@@@@   @@@@@  th ......";
+	 logoImg[5]  = "         .....        ----------------------- .....";
+	 logoImg[6]  = "          ....          C  E  N  T  U  R  Y     ....";
+	 logoImg[7]  = "           ...        -----------------------     ...";
+	 logoImg[8]  = "            ..        @@@@@ @@@@@ @   @ @@@@@       ..";
+	 logoImg[9]  = "            ==          @   @      @ @    @          ==";
+	 logoImg[10] = "          __||__        @   @@@@    @     @        __||__";
+	 logoImg[11] = "         |      |       @   @      @ @    @       |      |";
+	 logoImg[12] = "_________|______|_____  @   @@@@@ @   @   @  _____|______|_________";
 }
 
 void LogoUpdate()
 {
-	SetTextColor(WHITE);
-	SetPosition(10, 10);
-	printf("LOGO");
+	for (int i = 0; i < 13; i++)
+	{
+		SetTextColor(YELLOW);
+		SetPosition(3, 10 + i);
+		printf(logoImg[i]);
+	}
+
+	SetTextColor(RED);
+	SetPosition(16, 25);
+	printf("PRESSED ENTER");
 
 	if (GetAsyncKeyState(VK_RETURN))
 	{
-		SetTextColor(RED);
-		SetPosition(10, 20);
-		printf("PRESSED");
+		
 		MenuInit();
 		id = MENU;
 	}
