@@ -57,6 +57,7 @@ void LogoUpdate();
 const char* menuImg[7];
 Obj* menus[4];
 Obj* arrow;
+int menuIndex;
 void MenuInit();
 void MenuUpate();
 
@@ -162,6 +163,7 @@ void MenuInit()
 	menuImg[5] = "¡á¡¡¡¡¡¡¡á¡¡¡á¡¡¡¡¡¡¡¡¡¡¡á¡¡¡¡¡¡¡á¡¡¡á¡¡¡¡¡¡¡á";
 	menuImg[6] = "¡á¡¡¡¡¡¡¡á¡¡¡á¡á¡á¡á¡á¡¡¡á¡¡¡¡¡¡¡á¡¡¡¡¡á¡á¡á";	
 
+	menuIndex = 0;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -171,6 +173,7 @@ void MenuInit()
 		menus[i]->color = WHITE;
 	}
 
+	menus[0]->color = YELLOW;
 	menus[0]->shape = "START";
 	menus[1]->shape = "LOAD";
 	menus[2]->shape = "OPTION";
@@ -196,6 +199,9 @@ void MenuUpate()
 		if (arrow->y > menus[0]->y)
 		{
 			arrow->y -= 2;
+			menus[menuIndex]->color = WHITE;
+			menuIndex--;
+			menus[menuIndex]->color = YELLOW;
 		}
 	}
 
@@ -204,6 +210,9 @@ void MenuUpate()
 		if (arrow->y < menus[3]->y)
 		{
 			arrow->y += 2;
+			menus[menuIndex]->color = WHITE;
+			menuIndex++;
+			menus[menuIndex]->color = YELLOW;
 		}
 	}
 
