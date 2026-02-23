@@ -191,6 +191,23 @@ void MenuUpate()
 		printf(menuImg[i]);
 	}
 
+	if (GetAsyncKeyState(VK_UP))
+	{
+		if (arrow->y > menus[0]->y)
+		{
+			arrow->y -= 2;
+		}
+	}
+
+	if (GetAsyncKeyState(VK_DOWN))
+	{
+		if (arrow->y < menus[3]->y)
+		{
+			arrow->y += 2;
+		}
+	}
+
+
 	SetTextColor(arrow->color);
 	SetPosition(arrow->x, arrow->y);
 	printf(arrow->shape);
