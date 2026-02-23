@@ -22,6 +22,13 @@ enum Color
 	WHITE,
 };
 
+enum SCENE_ID
+{
+	LOGO,
+	MENU, 
+	STAGE,
+};
+
 #pragma endregion
 #pragma region WIN_API
 void HideCursor();
@@ -38,17 +45,30 @@ void Stage();
 
 
 int main()
-{
-	
+{	
 	HideCursor();
 
+	SCENE_ID id;
+	id = MENU;
 
 	while (true)
 	{
 		system("cls");
 
-		Logo();
-	
+		switch (id)
+		{
+		case LOGO:
+			Logo();
+			break;
+		case MENU:
+			Menu();
+			break;
+		case STAGE:
+			Stage();
+			break;
+		default:
+			break;
+		}
 		Sleep(50);
 	}
 
