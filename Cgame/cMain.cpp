@@ -29,6 +29,14 @@ enum SCENE_ID
 	STAGE,
 };
 
+enum MENU_ID
+{
+	START,
+	LOAD,
+	OPTION,
+	EXIT,
+};
+
 #pragma endregion
 
 #pragma region Struct
@@ -55,8 +63,8 @@ void LogoInit();
 void LogoUpdate();
 
 const char* menuImg[7];
-Obj* menus[4];
-Obj* arrow;
+Obj* menus[4] = {};
+Obj* arrow = nullptr;
 int menuIndex;
 void MenuInit();
 void MenuUpate();
@@ -65,20 +73,20 @@ void StageInit();
 void StageUpate();
 #pragma endregion
 
-SCENE_ID id;
+SCENE_ID sceneID;
 
 int main()
 {	
 	HideCursor();
 
-	id = LOGO;
+	sceneID = LOGO;
 	LogoInit();
 
 	while (true)
 	{
 		system("cls");
 
-		switch (id)
+		switch (sceneID)
 		{
 		case LOGO:
 			LogoUpdate();
@@ -147,7 +155,7 @@ void LogoUpdate()
 	{
 		
 		MenuInit();
-		id = MENU;
+		sceneID = MENU;
 	}
 }
 #pragma endregion
@@ -217,6 +225,7 @@ void MenuUpate()
 	}
 
 
+
 	SetTextColor(arrow->color);
 	SetPosition(arrow->x, arrow->y);
 	printf(arrow->shape);
@@ -228,6 +237,40 @@ void MenuUpate()
 		printf(menus[i]->shape);
 	}
 
+
+
+	if (GetAsyncKeyState(VK_RETURN))
+	{
+		
+
+		MENU_ID menuID = (MENU_ID)menuIndex;
+		switch (menuID)
+		{
+		case START:
+
+			free(arrow);
+			arrow = nullptr;
+
+			for (int i = 0; i < 4; i++)
+			{
+				free(menus[i]);
+				menus[i] = nullptr;
+			}
+
+			StageInit();
+			sceneID = STAGE;
+			break;
+		case LOAD:
+			break;
+		case OPTION:
+			break;
+		case EXIT:
+			exit(true);
+			break;
+		default:
+			break;
+		}
+	}
 	
 }
 #pragma endregion
