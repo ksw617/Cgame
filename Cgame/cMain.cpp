@@ -97,6 +97,14 @@ void Menu()
 	SetTextColor(WHITE);
 	SetPosition(10, 10);
 	printf("MENU");
+
+	if (GetAsyncKeyState(VK_RETURN))
+	{
+		SetTextColor(YELLOW);
+		SetPosition(10, 20);
+		printf("PRESSED");
+		id = STAGE;
+	}
 }
 
 void Stage()
