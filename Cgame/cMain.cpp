@@ -37,9 +37,12 @@ void SetPosition(int x, int y);
 #pragma endregion
 
 #pragma region GAME
-void Logo();
-void Menu();
-void Stage();
+void LogoInit();
+void LogoUpdate();
+void MenuInit();
+void MenuUpate();
+void StageInit();
+void StageUpate();
 #pragma endregion
 
 SCENE_ID id;
@@ -49,6 +52,7 @@ int main()
 	HideCursor();
 
 	id = LOGO;
+	LogoInit();
 
 	while (true)
 	{
@@ -57,13 +61,13 @@ int main()
 		switch (id)
 		{
 		case LOGO:
-			Logo();
+			LogoUpdate();
 			break;
 		case MENU:
-			Menu();
+			MenuUpate();
 			break;
 		case STAGE:
-			Stage();
+			StageUpate();
 			break;
 		default:
 			break;
@@ -77,7 +81,13 @@ int main()
 
 #pragma region GAME
 
-void Logo()
+#pragma region LOGO
+
+void LogoInit()
+{
+}
+
+void LogoUpdate()
 {
 	SetTextColor(WHITE);
 	SetPosition(10, 10);
@@ -88,11 +98,18 @@ void Logo()
 		SetTextColor(RED);
 		SetPosition(10, 20);
 		printf("PRESSED");
+		MenuInit();
 		id = MENU;
 	}
 }
+#pragma endregion
 
-void Menu()
+#pragma region MENU
+void MenuInit()
+{
+}
+
+void MenuUpate()
 {
 	SetTextColor(WHITE);
 	SetPosition(10, 10);
@@ -103,16 +120,25 @@ void Menu()
 		SetTextColor(YELLOW);
 		SetPosition(10, 20);
 		printf("PRESSED");
+		StageInit();
 		id = STAGE;
 	}
 }
+#pragma endregion
 
-void Stage()
+#pragma region STAGE
+void StageInit()
+{
+}
+
+void StageUpate()
 {
 	SetTextColor(WHITE);
 	SetPosition(10, 10);
 	printf("STAGE");
 }
+#pragma endregion
+
 #pragma endregion
 
 
