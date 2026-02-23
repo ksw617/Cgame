@@ -42,14 +42,13 @@ void Menu();
 void Stage();
 #pragma endregion
 
-
+SCENE_ID id;
 
 int main()
 {	
 	HideCursor();
 
-	SCENE_ID id;
-	id = MENU;
+	id = LOGO;
 
 	while (true)
 	{
@@ -89,7 +88,7 @@ void Logo()
 		SetTextColor(RED);
 		SetPosition(10, 20);
 		printf("PRESSED");
-		   //-> Menu 함수가 실행 될수 있게.
+		id = MENU;
 	}
 }
 
