@@ -56,6 +56,7 @@ void LogoUpdate();
 
 const char* menuImg[7];
 Obj* menus[4];
+Obj* arrow;
 void MenuInit();
 void MenuUpate();
 
@@ -174,8 +175,13 @@ void MenuInit()
 	menus[1]->shape = "LOAD";
 	menus[2]->shape = "OPTION";
 	menus[3]->shape = "EXIT";
-}
 
+	arrow = (Obj*)malloc(sizeof(Obj));;
+	arrow->x = 15;
+	arrow->y = 20;
+	arrow->color = YELLOW;
+	arrow->shape = "¢º";
+}	
 void MenuUpate()
 {
 	for (int i = 0; i < 7; i++)
@@ -184,6 +190,10 @@ void MenuUpate()
 		SetPosition(7, 10 + i);
 		printf(menuImg[i]);
 	}
+
+	SetTextColor(arrow->color);
+	SetPosition(arrow->x, arrow->y);
+	printf(arrow->shape);
 
 	for (int i = 0; i < 4; i++)
 	{
