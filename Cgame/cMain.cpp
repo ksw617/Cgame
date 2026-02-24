@@ -151,7 +151,7 @@ void LogoUpdate()
 	}
 
 
-	if (GetAsyncKeyState(VK_RETURN))
+	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
 		
 		MenuInit();
@@ -202,7 +202,7 @@ void MenuUpate()
 		printf(menuImg[i]);
 	}
 
-	if (GetAsyncKeyState(VK_UP))
+	if (GetAsyncKeyState(VK_UP) & 0x8000)
 	{
 		if (arrow->y > menus[0]->y)
 		{
@@ -213,7 +213,7 @@ void MenuUpate()
 		}
 	}
 
-	if (GetAsyncKeyState(VK_DOWN))
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
 	{
 		if (arrow->y < menus[3]->y)
 		{
@@ -239,7 +239,7 @@ void MenuUpate()
 
 
 
-	if (GetAsyncKeyState(VK_RETURN))
+	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
 		
 
