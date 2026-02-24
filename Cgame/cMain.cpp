@@ -27,6 +27,7 @@ enum SCENE_ID
 	LOGO,
 	MENU, 
 	STAGE,
+	SETTING,
 };
 
 enum MENU_ID
@@ -68,9 +69,15 @@ Obj* arrow = nullptr;
 int menuIndex;
 void MenuInit();
 void MenuUpate();
+void MenuRelease();
 
+Obj* player = nullptr;
 void StageInit();
 void StageUpate();
+void StageRelase();
+
+void SettingInit();
+void SettingUpate();
 #pragma endregion
 
 SCENE_ID sceneID;
@@ -96,6 +103,9 @@ int main()
 			break;
 		case STAGE:
 			StageUpate();
+			break;
+		case SETTING:
+			SettingUpate();
 			break;
 		default:
 			break;
@@ -248,23 +258,21 @@ void MenuUpate()
 		{
 		case START:
 
-			free(arrow);
-			arrow = nullptr;
-
-			for (int i = 0; i < 4; i++)
-			{
-				free(menus[i]);
-				menus[i] = nullptr;
-			}
-
+		
+			MenuRelease();
 			StageInit();
 			sceneID = STAGE;
 			break;
 		case LOAD:
+			MenuRelease();
 			break;
 		case OPTION:
+			MenuRelease();
+			SettingInit();
+			sceneID = SETTING;
 			break;
 		case EXIT:
+			MenuRelease();
 			exit(true);
 			break;
 		default:
@@ -273,11 +281,23 @@ void MenuUpate()
 	}
 	
 }
+void MenuRelease()
+{
+	free(arrow);
+	arrow = nullptr;
+
+	for (int i = 0; i < 4; i++)
+	{
+		free(menus[i]);
+		menus[i] = nullptr;
+	}
+}
 #pragma endregion
 
 #pragma region STAGE
 void StageInit()
 {
+	player = (Obj*)malloc(sizeof(Obj));
 }
 
 void StageUpate()
@@ -285,6 +305,18 @@ void StageUpate()
 	SetTextColor(WHITE);
 	SetPosition(10, 10);
 	printf("STAGE");
+}
+void StageRelase()
+{
+}
+void SettingInit()
+{
+}
+void SettingUpate()
+{
+	SetTextColor(WHITE);
+	SetPosition(10, 10);
+	printf("SETTING");
 }
 #pragma endregion
 
