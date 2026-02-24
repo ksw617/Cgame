@@ -188,13 +188,20 @@ void MenuInit()
 		menus[i] = (Obj*)malloc(sizeof(Obj));
 		menus[i]->x = 17;
 		menus[i]->y = 20 + i * 2;
-		menus[i]->color = WHITE;
+		
 	}
 
 	menus[0]->color = YELLOW;
 	menus[0]->shape = "START";
+	
+
+	menus[1]->color = player != nullptr ? WHITE : DARKGRAY;
 	menus[1]->shape = "LOAD";
+	
+	menus[2]->color = WHITE;
 	menus[2]->shape = "OPTION";
+	
+	menus[3]->color = WHITE;
 	menus[3]->shape = "EXIT";
 
 	arrow = (Obj*)malloc(sizeof(Obj));;
@@ -218,8 +225,23 @@ void MenuUpate()
 		{
 			arrow->y -= 2;
 			menus[menuIndex]->color = WHITE;
+			if (menuIndex == 1)
+				menus[1]->color = player != nullptr ? WHITE : DARKGRAY;
 			menuIndex--;
-			menus[menuIndex]->color = YELLOW;
+			if (menuIndex == 1)
+			{
+				if (player == nullptr)
+				{
+					menuIndex--;
+					arrow->y -= 2;
+				}
+
+				menus[menuIndex]->color = YELLOW;
+			}
+			else
+			{
+				menus[menuIndex]->color = YELLOW;
+			}
 		}
 	}
 
@@ -229,8 +251,24 @@ void MenuUpate()
 		{
 			arrow->y += 2;
 			menus[menuIndex]->color = WHITE;
+			if (menuIndex == 1)
+				menus[1]->color = player != nullptr ? WHITE : DARKGRAY;
 			menuIndex++;
-			menus[menuIndex]->color = YELLOW;
+			if (menuIndex == 1)
+			{
+				if (player == nullptr)
+				{
+					menuIndex++;
+					arrow->y += 2;
+				}
+
+				menus[menuIndex]->color = YELLOW;
+			}
+			else
+			{
+				menus[menuIndex]->color = YELLOW;
+			}
+		
 		}
 	}
 
@@ -257,14 +295,13 @@ void MenuUpate()
 		switch (menuID)
 		{
 		case START:
-
-		
 			MenuRelease();
 			StageInit();
 			sceneID = STAGE;
 			break;
 		case LOAD:
 			MenuRelease();
+			sceneID = STAGE;
 			break;
 		case OPTION:
 			MenuRelease();
@@ -297,6 +334,12 @@ void MenuRelease()
 #pragma region STAGE
 void StageInit()
 {
+	if (player != nullptr)
+	{
+		free(player);
+		player = nullptr;
+	}
+
 	player = (Obj*)malloc(sizeof(Obj));
 	player->x = 10;
 	player->y = 10;
@@ -306,9 +349,39 @@ void StageInit()
 
 void StageUpate()
 {
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	{
+		player->x--;
+	}
+
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	{
+		player->x++;
+	}
+
+
+	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	{
+		player->y--;
+	}
+
+
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	{
+		player->y++;
+	}
+
+
+
 	SetTextColor(player->color);
 	SetPosition(player->x, player->y);
 	printf(player->shape);
+
+	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+	{
+		MenuInit();
+		sceneID = MENU;
+	}
 }
 void StageRelase()
 {
