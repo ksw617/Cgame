@@ -298,13 +298,17 @@ void MenuRelease()
 void StageInit()
 {
 	player = (Obj*)malloc(sizeof(Obj));
+	player->x = 10;
+	player->y = 10;
+	player->color = YELLOW;
+	player->shape = "¿Ê";
 }
 
 void StageUpate()
 {
-	SetTextColor(WHITE);
-	SetPosition(10, 10);
-	printf("STAGE");
+	SetTextColor(player->color);
+	SetPosition(player->x, player->y);
+	printf(player->shape);
 }
 void StageRelase()
 {
