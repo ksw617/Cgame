@@ -138,6 +138,7 @@ void LogoProgress()
 		LogoRelease();
 		id = MENU;
 		MenuInit();
+		return;
 	}
 }
 
@@ -157,6 +158,13 @@ void MenuInit()
 
 void MenuProgress()
 {
+	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+	{
+		MenuRelease();
+		id = STAGE;
+		StageInit();
+		return;
+	}
 }
 
 void MenuRender()
