@@ -64,6 +64,26 @@ int main()
 
 	while (true)
 	{
+		if (GetAsyncKeyState(VK_LEFT))
+		{
+			player->x--;
+		}
+
+		if (GetAsyncKeyState(VK_RIGHT))
+		{
+			player->x++;
+		}
+
+		if (GetAsyncKeyState(VK_UP))
+		{
+			player->y--;
+		}
+
+		if (GetAsyncKeyState(VK_DOWN))
+		{
+			player->y++;
+		}
+
 		WriteBuffer(player->x, player->y, player->shape, player->color);
 
 		FlipBuffer();
