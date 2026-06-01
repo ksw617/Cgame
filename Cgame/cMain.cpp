@@ -50,6 +50,7 @@ enum  SCENE_ID
 
 #pragma region Define
 #define BulletCount 10
+#define EnemyCount 10
 #pragma endregion
 
 #pragma region Struct
@@ -62,19 +63,22 @@ struct Bullet
 	const char* shape;
 	Color color;
 };
-struct Player
+typedef struct Obj
 {
+	bool act;
 	int x;
 	int y;
 	const char* shape[3];
 	Color color;
-};
+}Player, Enemy;
 #pragma endregion
 
 #pragma region Vairables
+int spawnTimer = 0;
 SCENE_ID id;
 Player* player = nullptr;
 Bullet* bullets[BulletCount] = {};
+Enemy* enemies[EnemyCount] = {};
 #pragma endregion
 
 #pragma region GAME
@@ -210,19 +214,79 @@ void StageInit()
 		bullets[i]->color = BLUE;
 
 	}
+
+	for (int i = 0; i < EnemyCount; i++)
+	{
+		enemies[i] = (Enemy*)malloc(sizeof(Enemy));
+		enemies[i]->act = false;
+		enemies[i]->x = i * 4;
+		enemies[i]->y = 1;
+		enemies[i]->shape[0] = "¡á¡á¡á";
+		enemies[i]->shape[1] = "¡á¡á¡á";
+		enemies[i]->shape[2] = "¡á¡á¡á";
+		enemies[i]->color = RED;
+	}
 }
 
 void StageProgress()
 {
-	if (GetAsyncKeyState(VK_LEFT))
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 	{
 		player->x--;
 	}
 
-	if (GetAsyncKeyState(VK_RIGHT))
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 	{
 		player->x++;
 	}
+
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+	{
+		for (int i = 0; i < BulletCount; i++)
+		{
+			if (!bullets[i]->act)
+			{
+				bullets[i]->act = true;
+				bullets[i]->x = player->x + 1;
+				bullets[i]->y = player->y - 1;
+				bullets[i]->color = RED;
+				break;
+			}
+		}
+	}
+
+	for (int i = 0; i < BulletCount; i++)
+	{
+		if (bullets[i]->act)
+		{
+			bullets[i]->y--;
+			if (bullets[i]->y < 0)
+			{
+				bullets[i]->act = false;
+				bullets[i]->x = i;
+				bullets[i]->y = 0;
+				bullets[i]->color = BLUE;
+			}
+		}
+	}
+
+	spawnTimer++;
+	if (spawnTimer > 50)
+	{
+		spawnTimer = 0;
+		int actIdx = 0;
+		do
+		{
+			actIdx = rand() % EnemyCount;
+
+		} while (enemies[actIdx]->act);
+
+
+		enemies[actIdx]->act = true;
+		enemies[actIdx]->color = YELLOW;
+	}
+
+
 }
 
 void StageRender()
@@ -237,6 +301,15 @@ void StageRender()
 		WriteBuffer(bullets[i]->x, bullets[i]->y, bullets[i]->shape, bullets[i]->color);
 	}
 
+	for (int i = 0; i < EnemyCount; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			WriteBuffer(enemies[i]->x, enemies[i]->y + j, enemies[i]->shape[j], enemies[i]->color);
+		}
+	}
+
+
 }
 
 void StageRelease()
@@ -245,6 +318,26 @@ void StageRelease()
 	{
 		free(player);
 		player = nullptr;
+	}
+
+	for (int i = 0; i < BulletCount; i++)
+	{
+		if (bullets[i] != nullptr)
+		{
+			free(bullets[i]);
+			bullets[i] = nullptr;
+
+		}
+	}
+
+	for (int i = 0; i < EnemyCount; i++)
+	{
+		if (enemies[i] != nullptr)
+		{
+			free(enemies[i]);
+			enemies[i] = nullptr;
+
+		}
 	}
 }
 #pragma endregion
