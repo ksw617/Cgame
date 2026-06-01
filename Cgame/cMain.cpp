@@ -286,6 +286,21 @@ void StageProgress()
 		enemies[actIdx]->color = YELLOW;
 	}
 
+	for (int i = 0; i < EnemyCount; i++)
+	{
+		if (enemies[i]->act)
+		{
+			enemies[i]->y++;
+			if (enemies[i]->y >= 38)
+			{
+				enemies[i]->act = false;
+				enemies[i]->x = i * 4;
+				enemies[i]->y = 1;
+				enemies[i]->color = RED;
+			}
+		}
+	}
+
 
 }
 
