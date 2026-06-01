@@ -47,8 +47,22 @@ enum  SCENE_ID
 	STAGE,
 };
 #pragma endregion
+
+#pragma region Define
+#define BulletCount 10
+#pragma endregion
+
 #pragma region Struct
-struct Obj
+
+struct Bullet
+{
+	bool act;
+	int x;
+	int y;
+	const char* shape;
+	Color color;
+};
+struct Player
 {
 	int x;
 	int y;
@@ -59,7 +73,8 @@ struct Obj
 
 #pragma region Vairables
 SCENE_ID id;
-Obj* player = nullptr;
+Player* player = nullptr;
+Bullet* bullets[BulletCount] = {};
 #pragma endregion
 
 #pragma region GAME
@@ -177,13 +192,24 @@ void MenuRelease()
 #pragma region STAGE
 void StageInit()
 {
-	player = (Obj*)malloc(sizeof(Obj));
+	player = (Player*)malloc(sizeof(Player));
 	player->x = 17;
 	player->y = 33;
 	player->shape[0] = "¡¡¡á¡¡";
 	player->shape[1] = "¡á¡á¡á";
 	player->shape[2] = "¡á¡á¡á";
 	player->color = WHITE;
+
+	for (int i = 0; i < BulletCount; i++)
+	{
+		bullets[i] = (Bullet*)malloc(sizeof(Bullet));
+		bullets[i]->act = false;
+		bullets[i]->x = i;
+		bullets[i]->y = 0;
+		bullets[i]->shape = "¡Ü";
+		bullets[i]->color = BLUE;
+
+	}
 }
 
 void StageProgress()
@@ -204,6 +230,11 @@ void StageRender()
 	for (int i = 0; i < 3; i++)
 	{
 		WriteBuffer(player->x, player->y + i, player->shape[i], player->color);
+	}
+
+	for (int i = 0; i < BulletCount; i++)
+	{
+		WriteBuffer(bullets[i]->x, bullets[i]->y, bullets[i]->shape, bullets[i]->color);
 	}
 
 }
