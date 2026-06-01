@@ -52,7 +52,7 @@ struct Obj
 {
 	int x;
 	int y;
-	const char* shape;
+	const char* shape[3];
 	Color color;
 };
 #pragma endregion
@@ -79,9 +79,6 @@ void StageProgress();
 void StageRender();
 void StageRelease();
 #pragma endregion
-
-
-
 
 int main()
 {
@@ -181,9 +178,11 @@ void MenuRelease()
 void StageInit()
 {
 	player = (Obj*)malloc(sizeof(Obj));
-	player->x = 10;
-	player->y = 10;
-	player->shape = "옷";
+	player->x = 17;
+	player->y = 33;
+	player->shape[0] = "　■　";
+	player->shape[1] = "■■■";
+	player->shape[2] = "■■■";
 	player->color = WHITE;
 }
 
@@ -198,21 +197,15 @@ void StageProgress()
 	{
 		player->x++;
 	}
-
-	if (GetAsyncKeyState(VK_UP))
-	{
-		player->y--;
-	}
-
-	if (GetAsyncKeyState(VK_DOWN))
-	{
-		player->y++;
-	}
 }
 
 void StageRender()
 {
-	WriteBuffer(player->x, player->y, player->shape, player->color);
+	for (int i = 0; i < 3; i++)
+	{
+		WriteBuffer(player->x, player->y + i, player->shape[i], player->color);
+	}
+
 }
 
 void StageRelease()
@@ -226,8 +219,6 @@ void StageRelease()
 #pragma endregion
 
 #pragma endregion
-
-
 
 #pragma region DoubleBuffer
 //버퍼 초기화
