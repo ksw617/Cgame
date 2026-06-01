@@ -66,6 +66,7 @@ struct Bullet
 typedef struct Obj
 {
 	bool act;
+	int hp;
 	int x;
 	int y;
 	const char* shape[3];
@@ -194,9 +195,17 @@ void MenuRelease()
 
 #pragma endregion
 #pragma region STAGE
+void EnemyReset(int index)
+{
+	enemies[index]->act = false;
+	enemies[index]->x = index * 4;
+	enemies[index]->y = 1;
+	enemies[index]->color = RED;
+}
 void StageInit()
 {
 	player = (Player*)malloc(sizeof(Player));
+	player->hp = 5;
 	player->x = 17;
 	player->y = 33;
 	player->shape[0] = "¡¡¡á¡¡";
@@ -293,10 +302,16 @@ void StageProgress()
 			enemies[i]->y++;
 			if (enemies[i]->y >= 38)
 			{
-				enemies[i]->act = false;
-				enemies[i]->x = i * 4;
-				enemies[i]->y = 1;
-				enemies[i]->color = RED;
+				EnemyReset(i);
+			}
+
+			if (enemies[i]->x <= player->x + 3 &&
+				player->x <= enemies[i]->x + 3 && 
+				enemies[i]->y <= player->y + 3 &&
+				player->y <= enemies[i]->y + 3)
+			{
+				player->hp--;
+				EnemyReset(i);
 			}
 		}
 	}
@@ -322,6 +337,11 @@ void StageRender()
 		{
 			WriteBuffer(enemies[i]->x, enemies[i]->y + j, enemies[i]->shape[j], enemies[i]->color);
 		}
+	}
+
+	for (int i = 0; i < player->hp; i++)
+	{
+		WriteBuffer(38 - i, 0, "¢¾", RED);
 	}
 
 
