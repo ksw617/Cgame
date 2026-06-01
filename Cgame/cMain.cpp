@@ -1,6 +1,24 @@
 #include <stdio.h>
 #include <Windows.h>
 
+
+#pragma region DoubleBuffer
+//버퍼 초기화
+#define BufferWidth 80	// 가로 버퍼 크기
+#define BufferHeight 40 // 세로 버퍼 크기
+
+
+HANDLE hBuffer[2];	//창 두게를 제어하는 핸들
+int screenIndex;	//hBuffer[screenIndex], screenIndex == 0 or 1
+
+
+void InitBuffer();
+void FlipBuffer();
+void ClearBuffer();
+void WriteBuffer(int x, int y, const char* shape, int color);
+void CloseBuffer();
+
+#pragma endregion
 #pragma region Enum
 enum Color
 {
@@ -21,33 +39,32 @@ enum Color
 	YELLOW,
 	WHITE,
 };
-
-#pragma region DoubleBuffer
-//버퍼 초기화
-#define BufferWidth 80	// 가로 버퍼 크기
-#define BufferHeight 40 // 세로 버퍼 크기
-
-
-HANDLE hBuffer[2];	//창 두게를 제어하는 핸들
-int screenIndex;	//hBuffer[screenIndex], screenIndex == 0 or 1
-
-
-void InitBuffer();
-void FlipBuffer();
-void ClearBuffer();
-void WriteBuffer(int x, int y, const char* shape, int color);
-void CloseBuffer();
-
 #pragma endregion
 
+#pragma region Struct
+struct Obj
+{
+	int x;
+	int y;
+	const char* shape;
+	Color color;
+};
+#pragma endregion
+
+Obj* player = nullptr;
 
 int main()
 {
 	InitBuffer();
+	player = (Obj*)malloc(sizeof(Obj));
+	player->x = 10;
+	player->y = 10;
+	player->shape = "옷";
+	player->color = WHITE;
 
 	while (true)
 	{
-		WriteBuffer(10, 10, "Hello world", WHITE);
+		WriteBuffer(player->x, player->y, player->shape, player->color);
 
 		FlipBuffer();
 		ClearBuffer();
