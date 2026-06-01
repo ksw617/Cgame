@@ -39,8 +39,14 @@ enum Color
 	YELLOW,
 	WHITE,
 };
-#pragma endregion
 
+enum  SCENE_ID
+{
+	LOGO,
+	MENU,
+	STAGE,
+};
+#pragma endregion
 #pragma region Struct
 struct Obj
 {
@@ -51,41 +57,59 @@ struct Obj
 };
 #pragma endregion
 
+#pragma region Vairables
+SCENE_ID id;
 Obj* player = nullptr;
+#pragma endregion
+
+#pragma region GAME
+
+void LogoInit();
+void LogoProgress();
+void LogoRender();
+void LogoRelease();
+
+void MenuInit();
+void MenuProgress();
+void MenuRender();
+void MenuRelease();
+
+void StageInit();
+void StageProgress();
+void StageRender();
+void StageRelease();
+#pragma endregion
+
+
+
 
 int main()
 {
+	id = LOGO;
+	LogoInit();
 	InitBuffer();
-	player = (Obj*)malloc(sizeof(Obj));
-	player->x = 10;
-	player->y = 10;
-	player->shape = "¿Ê";
-	player->color = WHITE;
+
 
 	while (true)
 	{
-		if (GetAsyncKeyState(VK_LEFT))
+		switch (id)
 		{
-			player->x--;
+		case LOGO:
+			LogoProgress();
+			LogoRender();
+			break;
+		case MENU:
+			MenuProgress();
+			MenuRender();
+			break;
+		case STAGE:
+			StageProgress();
+			StageRender();
+			break;
+		default:
+			break;
 		}
-
-		if (GetAsyncKeyState(VK_RIGHT))
-		{
-			player->x++;
-		}
-
-		if (GetAsyncKeyState(VK_UP))
-		{
-			player->y--;
-		}
-
-		if (GetAsyncKeyState(VK_DOWN))
-		{
-			player->y++;
-		}
-
-		WriteBuffer(player->x, player->y, player->shape, player->color);
-
+		
 		FlipBuffer();
 		ClearBuffer();
 
@@ -93,9 +117,108 @@ int main()
 
 	}
 
+
 	CloseBuffer();
+
+
 	return 0;
 }
+
+#pragma region GAME
+
+#pragma region LOGO
+void LogoInit()
+{
+}
+
+void LogoProgress()
+{
+	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+	{
+		LogoRelease();
+		id = MENU;
+		MenuInit();
+	}
+}
+
+void LogoRender()
+{
+	WriteBuffer(10, 10, "LOGO", WHITE);
+}
+
+void LogoRelease()
+{
+}
+#pragma endregion
+#pragma region MENU
+void MenuInit()
+{
+}
+
+void MenuProgress()
+{
+}
+
+void MenuRender()
+{
+	WriteBuffer(10, 10, "MENU", WHITE);
+}
+
+void MenuRelease()
+{
+}
+
+#pragma endregion
+#pragma region STAGE
+void StageInit()
+{
+	player = (Obj*)malloc(sizeof(Obj));
+	player->x = 10;
+	player->y = 10;
+	player->shape = "¿Ê";
+	player->color = WHITE;
+}
+
+void StageProgress()
+{
+	if (GetAsyncKeyState(VK_LEFT))
+	{
+		player->x--;
+	}
+
+	if (GetAsyncKeyState(VK_RIGHT))
+	{
+		player->x++;
+	}
+
+	if (GetAsyncKeyState(VK_UP))
+	{
+		player->y--;
+	}
+
+	if (GetAsyncKeyState(VK_DOWN))
+	{
+		player->y++;
+	}
+}
+
+void StageRender()
+{
+	WriteBuffer(player->x, player->y, player->shape, player->color);
+}
+
+void StageRelease()
+{
+	if (player != nullptr)
+	{
+		free(player);
+		player = nullptr;
+	}
+}
+#pragma endregion
+
+#pragma endregion
+
 
 
 #pragma region DoubleBuffer
@@ -188,4 +311,6 @@ void CloseBuffer()
 	CloseHandle(hBuffer[1]);
 }
 
+
 #pragma endregion
+
