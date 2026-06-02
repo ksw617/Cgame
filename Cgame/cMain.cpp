@@ -50,7 +50,8 @@ enum  SCENE_ID
 
 #pragma region Define
 #define BulletCount 10
-#define EnemyCount 10
+#define EnemyBullet 40
+#define EnemyCount 13
 #pragma endregion
 
 #pragma region Struct
@@ -66,6 +67,8 @@ struct Bullet
 typedef struct Obj
 {
 	bool act;
+	int shootTime;
+	int maxShootTime;
 	int hp;
 	int x;
 	int y;
@@ -76,9 +79,11 @@ typedef struct Obj
 
 #pragma region Vairables
 int spawnTimer = 0;
+int maxSpawnTime = 50;
 SCENE_ID id;
 Player* player = nullptr;
 Bullet* bullets[BulletCount] = {};
+Bullet* enemyBullets[EnemyBullet] = {};
 Enemy* enemies[EnemyCount] = {};
 #pragma endregion
 
@@ -198,10 +203,27 @@ void MenuRelease()
 void EnemyReset(int index)
 {
 	enemies[index]->act = false;
-	enemies[index]->x = index * 4;
+	enemies[index]->x = index * 3;
 	enemies[index]->y = 1;
 	enemies[index]->color = RED;
 }
+
+void EnemyShoot(Obj* enemy)
+{
+	//TODO
+
+	for (int i = 0; i < EnemyBullet; i++)
+	{
+		if (!enemyBullets[i]->act)
+		{
+			enemyBullets[i]->act = true;
+			enemyBullets[i]->x = enemy->x + 1;
+			enemyBullets[i]->y = enemy->y + 3;
+			break;
+		}
+	}
+}
+
 void StageInit()
 {
 	player = (Player*)malloc(sizeof(Player));
@@ -224,11 +246,21 @@ void StageInit()
 
 	}
 
+	for (int i = 0; i < EnemyBullet; i++)
+	{
+		enemyBullets[i] = (Bullet*)malloc(sizeof(Bullet));
+		enemyBullets[i]->act = false;
+		enemyBullets[i]->shape = "¡Ü";
+		enemyBullets[i]->color = RED;
+	}
+
 	for (int i = 0; i < EnemyCount; i++)
 	{
 		enemies[i] = (Enemy*)malloc(sizeof(Enemy));
 		enemies[i]->act = false;
-		enemies[i]->x = i * 4;
+		enemies[i]->shootTime = 0;
+		enemies[i]->maxShootTime = 3;
+		enemies[i]->x = i * 3;
 		enemies[i]->y = 1;
 		enemies[i]->shape[0] = "¡á¡á¡á";
 		enemies[i]->shape[1] = "¡á¡á¡á";
@@ -280,25 +312,48 @@ void StageProgress()
 	}
 
 	spawnTimer++;
-	if (spawnTimer > 50)
+	if (spawnTimer > maxSpawnTime)
 	{
+		if (maxSpawnTime > 5)
+			maxSpawnTime--;
 		spawnTimer = 0;
-		int actIdx = 0;
-		do
+	
+		int index = 0;
+		for (; index < EnemyCount; index++)
 		{
-			actIdx = rand() % EnemyCount;
+			if (!enemies[index]->act)
+				break;
+		}
 
-		} while (enemies[actIdx]->act);
+		if (index < EnemyCount)
+		{
+			int actIdx = 0;
+			do
+			{
+				actIdx = rand() % EnemyCount;
+
+			} while (enemies[actIdx]->act);
 
 
-		enemies[actIdx]->act = true;
-		enemies[actIdx]->color = YELLOW;
+			enemies[actIdx]->act = true;
+			enemies[actIdx]->shootTime = 0;
+			enemies[actIdx]->color = YELLOW;
+		}
 	}
 
 	for (int i = 0; i < EnemyCount; i++)
 	{
 		if (enemies[i]->act)
 		{
+
+			enemies[i]->shootTime++;
+			if (enemies[i]->shootTime > enemies[i]->maxShootTime)
+			{
+				enemies[i]->shootTime = 0;
+				EnemyShoot(enemies[i]);
+			}
+
+
 			enemies[i]->y++;
 			if (enemies[i]->y >= 38)
 			{
@@ -312,6 +367,26 @@ void StageProgress()
 			{
 				player->hp--;
 				EnemyReset(i);
+			}
+
+			for (int j = 0; j < BulletCount; j++)
+			{
+				if (bullets[j]->act)
+				{
+					if (enemies[i]->x <= bullets[j]->x &&
+						bullets[j]->x < enemies[i]->x + 3 &&
+						enemies[i]->y <= bullets[j]->y &&
+						bullets[j]->y < enemies[i]->y + 3)
+					{
+						bullets[i]->act = false;
+						bullets[i]->x = i;
+						bullets[i]->y = 0;
+						bullets[i]->color = BLUE;
+						EnemyReset(i);
+					}
+				}
+
+		
 			}
 		}
 	}
@@ -333,9 +408,21 @@ void StageRender()
 
 	for (int i = 0; i < EnemyCount; i++)
 	{
-		for (int j = 0; j < 3; j++)
+		if (enemies[i]->act)
 		{
-			WriteBuffer(enemies[i]->x, enemies[i]->y + j, enemies[i]->shape[j], enemies[i]->color);
+			for (int j = 0; j < 3; j++)
+			{
+				WriteBuffer(enemies[i]->x, enemies[i]->y + j, enemies[i]->shape[j], enemies[i]->color);
+			}
+		}
+	}
+
+	for (int i = 0; i < EnemyBullet; i++)
+	{
+		if (enemyBullets[i]->act)
+		{
+			WriteBuffer(enemyBullets[i]->x, enemyBullets[i]->y, enemyBullets[i]->shape, enemyBullets[i]->color);
+
 		}
 	}
 
@@ -371,6 +458,16 @@ void StageRelease()
 		{
 			free(enemies[i]);
 			enemies[i] = nullptr;
+
+		}
+	}
+
+	for (int i = 0; i < EnemyBullet; i++)
+	{
+		if (enemyBullets[i] != nullptr)
+		{
+			free(enemyBullets[i]);
+			enemyBullets[i] = nullptr;
 
 		}
 	}
