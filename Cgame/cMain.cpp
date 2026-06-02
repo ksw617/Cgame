@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <Windows.h>
+#include <math.h>
 
 
 #pragma region DoubleBuffer
@@ -61,6 +62,10 @@ struct Bullet
 	bool act;
 	int x;
 	int y;
+	int startX;
+	int startY;
+	int targetX;
+	int targetY;
 	const char* shape;
 	Color color;
 };
@@ -219,9 +224,35 @@ void EnemyShoot(Obj* enemy)
 			enemyBullets[i]->act = true;
 			enemyBullets[i]->x = enemy->x + 1;
 			enemyBullets[i]->y = enemy->y + 3;
+			enemyBullets[i]->startX = enemyBullets[i]->x;
+			enemyBullets[i]->startY = enemyBullets[i]->y;
+			enemyBullets[i]->targetX = player->x;
+			enemyBullets[i]->targetY = player->y;
 			break;
 		}
 	}
+}
+
+void UpdateBullet(Bullet* bullet)
+{
+	float dx = bullet->targetX - bullet->startX;
+	float dy = bullet->targetY - bullet->startY;
+
+	float distance = sqrtf(dx * dx + dy * dy);
+
+	// ¸ñÇ¥ µµÂø
+	//if (distance < 1)
+	//{
+	//	bullet->x = bullet->targetX;
+	//	bullet->y = bullet->targetY;
+	//	return;
+	//}
+
+	float dirX = dx / distance;
+	float dirY = dy / distance;
+
+	bullet->x += dirX;
+	bullet->y += dirY;
 }
 
 void StageInit()
@@ -259,7 +290,7 @@ void StageInit()
 		enemies[i] = (Enemy*)malloc(sizeof(Enemy));
 		enemies[i]->act = false;
 		enemies[i]->shootTime = 0;
-		enemies[i]->maxShootTime = 3;
+		enemies[i]->maxShootTime = 10;
 		enemies[i]->x = i * 3;
 		enemies[i]->y = 1;
 		enemies[i]->shape[0] = "¡á¡á¡á";
@@ -388,6 +419,15 @@ void StageProgress()
 
 		
 			}
+		}
+	}
+
+
+	for (int i = 0; i < EnemyBullet; i++)
+	{
+		if (enemyBullets[i]->act)
+		{
+			UpdateBullet(enemyBullets[i]);
 		}
 	}
 
