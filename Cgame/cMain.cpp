@@ -60,10 +60,8 @@ enum  SCENE_ID
 struct Bullet
 {
 	bool act;
-	int x;
-	int y;
-	int startX;
-	int startY;
+	float x;
+	float y;
 	int targetX;
 	int targetY;
 	const char* shape;
@@ -224,8 +222,6 @@ void EnemyShoot(Obj* enemy)
 			enemyBullets[i]->act = true;
 			enemyBullets[i]->x = enemy->x + 1;
 			enemyBullets[i]->y = enemy->y + 3;
-			enemyBullets[i]->startX = enemyBullets[i]->x;
-			enemyBullets[i]->startY = enemyBullets[i]->y;
 			enemyBullets[i]->targetX = player->x;
 			enemyBullets[i]->targetY = player->y;
 			break;
@@ -235,24 +231,34 @@ void EnemyShoot(Obj* enemy)
 
 void UpdateBullet(Bullet* bullet)
 {
-	float dx = bullet->targetX - bullet->startX;
-	float dy = bullet->targetY - bullet->startY;
+	float dx = bullet->targetX - bullet->x;
+	float dy = bullet->targetY - bullet->y;
 
 	float distance = sqrtf(dx * dx + dy * dy);
 
 	// ¸ñÇ¥ µµÂø
-	//if (distance < 1)
-	//{
-	//	bullet->x = bullet->targetX;
-	//	bullet->y = bullet->targetY;
-	//	return;
-	//}
+	if (distance < 1)
+	{
+		bullet->x = bullet->targetX;
+		bullet->y = bullet->targetY;
+		bullet->act = false;
+		return;
+	}
 
 	float dirX = dx / distance;
 	float dirY = dy / distance;
 
-	bullet->x += dirX;
-	bullet->y += dirY;
+	bullet->x += dirX * 1.5;
+	bullet->y += dirY * 1.5;
+}
+
+void GetDamage()
+{
+	player->hp--;
+	if (player->hp <= 0)
+	{
+		exit(true);
+	}
 }
 
 void StageInit()
@@ -290,7 +296,7 @@ void StageInit()
 		enemies[i] = (Enemy*)malloc(sizeof(Enemy));
 		enemies[i]->act = false;
 		enemies[i]->shootTime = 0;
-		enemies[i]->maxShootTime = 10;
+		enemies[i]->maxShootTime = 5;
 		enemies[i]->x = i * 3;
 		enemies[i]->y = 1;
 		enemies[i]->shape[0] = "¡á¡á¡á";
@@ -321,7 +327,6 @@ void StageProgress()
 				bullets[i]->act = true;
 				bullets[i]->x = player->x + 1;
 				bullets[i]->y = player->y - 1;
-				bullets[i]->color = RED;
 				break;
 			}
 		}
@@ -337,7 +342,6 @@ void StageProgress()
 				bullets[i]->act = false;
 				bullets[i]->x = i;
 				bullets[i]->y = 0;
-				bullets[i]->color = BLUE;
 			}
 		}
 	}
@@ -381,7 +385,11 @@ void StageProgress()
 			if (enemies[i]->shootTime > enemies[i]->maxShootTime)
 			{
 				enemies[i]->shootTime = 0;
-				EnemyShoot(enemies[i]);
+				if (enemies[i]->y < 20)
+				{
+					EnemyShoot(enemies[i]);
+				}
+				
 			}
 
 
@@ -396,7 +404,7 @@ void StageProgress()
 				enemies[i]->y <= player->y + 3 &&
 				player->y <= enemies[i]->y + 3)
 			{
-				player->hp--;
+				GetDamage();
 				EnemyReset(i);
 			}
 
@@ -428,6 +436,15 @@ void StageProgress()
 		if (enemyBullets[i]->act)
 		{
 			UpdateBullet(enemyBullets[i]);
+
+			if (player->x <= enemyBullets[i]->x &&
+				enemyBullets[i]->x < player->x + 3 &&
+				player->y <= enemyBullets[i]->y &&
+				enemyBullets[i]->y < player->y + 3)
+			{
+				GetDamage();
+				enemyBullets[i]->act = false;
+			}
 		}
 	}
 
