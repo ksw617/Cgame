@@ -1,22 +1,7 @@
 #include <stdio.h>
 #include <Windows.h>
 
-enum SCENE_ID
-{
-    LOGO,
-    MENU, 
-    STAGE,
-    UTILL,
-};
-
-enum MENU_ID
-{
-    CONTINUE,
-    NEWGAME,
-    UTILITY,
-    EXIT,
-};
-
+#pragma region Enum
 enum Color
 {
     //BLACK,
@@ -36,190 +21,382 @@ enum Color
     LIGHT_YELLOW,
     LIGHT_WHITE,
 };
-
+enum Dir
+{
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN,
+};
+#pragma endregion
+#pragma region 구조체
 struct Obj
 {
+    Dir dir;
     int x;
     int y;
     Color color;
-    const char* shape;
+
+    int ani = 0;
+    // [방향][자세][y줄]
+    const char* shape[4][3][13];
 };
+#pragma endregion
 
-void SetPosition(int x, int y)
-{
-    COORD pos{ x * 2, y };
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
-}     
 
-void ChangeColor(Color color)
+
+#pragma region 더블버퍼
+#define BufferWidth 300    
+#define BufferHeight 100
+
+HANDLE hBuffer[2];
+int screenIndex;
+
+void InitBuffer();
+void FlipBuffer();
+void ClearBuffer();
+void CloseBuffer();
+void WriteBuffer(int x, int y, Color color, const char* shape);
+#pragma endregion
+
+#pragma region 플레이어
+Obj player;
+
+void PlayerInit();
+void PlayerUpdate();
+#pragma endregion
+
+#pragma region Game
+void GameInit()
 {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+    PlayerInit();
 }
 
-SCENE_ID sceneID = LOGO;
+void GameUpdate()
+{
+    PlayerUpdate();
+}
+#pragma endregion
 
-void LogoInit();
-void LogoUpdate();
-
-#define MENU_COUNT 4
-
-Obj arrow;
-Obj menus[MENU_COUNT];
-
-MENU_ID menuID = CONTINUE;
-
-void MenuInit();
-void MenuUpdate();
-
-void StageInit();
-void StageUpdate();
-
-void UtillUpdate();
-
+#pragma region Main 함수
 int main()
 {
-    LogoInit();
+    InitBuffer();
+
+    GameInit();
 
     while (true)
     {
-        system("cls");
-       
-        switch (sceneID)
-        {
-        case LOGO:
-            LogoUpdate();
-            break;
-        case MENU: 
-            MenuUpdate();
-            break;
-        case STAGE:
-            StageUpdate();
-            break;
-        case UTILL:
-            UtillUpdate();
-        default:
-            break;
-        }
+        GameUpdate();
+     
+        FlipBuffer();
+        ClearBuffer();
 
-        Sleep(50);
+        Sleep(10);
     }
+
+    CloseBuffer();
 
     return 0;
 }
+#pragma endregion
 
-void LogoInit() {}
+#pragma region Player
 
-void LogoUpdate()
+void PlayerInit()
 {
-    SetPosition(10, 10);
-    printf("LOGO");
+    player.x = 10;
+    player.y = 10;
+    player.color = LIGHT_WHITE;
 
-    if (GetAsyncKeyState(VK_RETURN))
-    {
-        sceneID = MENU;
-        MenuInit();
-    }
+#pragma region 왼쪽
+    // 자세 0: 기본
+    player.shape[0][0][0] = "　　　■■　　　";
+    player.shape[0][0][1] = "　■■　　■■　";
+    player.shape[0][0][2] = "■　　　　　　■";
+    player.shape[0][0][3] = "■　　　　　　■";
+    player.shape[0][0][4] = "■■　　　　　■";
+    player.shape[0][0][5] = "■　■■■　　■";
+    player.shape[0][0][6] = "■　　　　■　■";
+    player.shape[0][0][7] = "　■　■　　■　";
+    player.shape[0][0][8] = "■　　　　■■　";
+    player.shape[0][0][9] = "　■■■■■　　";
+    player.shape[0][0][10] = "■　　　　■　　";
+    player.shape[0][0][11] = "■　■■　■　　";
+    player.shape[0][0][12] = "　■　　■　　　";
+
+    // 자세 1: 살짝 눌림
+    player.shape[0][1][0] = "　　　　　　　　";
+    player.shape[0][1][1] = "　　　■■　　　";
+    player.shape[0][1][2] = "　■■　　■■　";
+    player.shape[0][1][3] = "■　　　　　　■";
+    player.shape[0][1][4] = "■■　　　　　■";
+    player.shape[0][1][5] = "■　■■■　　■";
+    player.shape[0][1][6] = "■　　　　■　■";
+    player.shape[0][1][7] = "　■　■　　■　";
+    player.shape[0][1][8] = "■　　　　■■　";
+    player.shape[0][1][9] = "　■■■■■　　";
+    player.shape[0][1][10] = "■　　　　■　　";
+    player.shape[0][1][11] = "■　■■　■　　";
+    player.shape[0][1][12] = "　■　　■　　　";
+
+    // 자세 2: 몸까지 눌림
+    player.shape[0][2][0] = "　　　　　　　　";
+    player.shape[0][2][1] = "　　　■■　　　";
+    player.shape[0][2][2] = "　■■　　■■　";
+    player.shape[0][2][3] = "■　　　　　　■";
+    player.shape[0][2][4] = "■　　　　　　■";
+    player.shape[0][2][5] = "■■　　　　　■";
+    player.shape[0][2][6] = "■　■■■　　■";
+    player.shape[0][2][7] = "■　　　　■　■";
+    player.shape[0][2][8] = "　■　■　　■　";
+    player.shape[0][2][9] = "■　　　　■■　";
+    player.shape[0][2][10] = "　■■■■■　　";
+    player.shape[0][2][11] = "■　■■　■　　";
+    player.shape[0][2][12] = "　■　　■　　　";
+
+#pragma endregion
+
+#pragma region 오른쪽
+    // 자세 0: 기본
+    player.shape[1][0][0] = "　　　■■　　　";
+    player.shape[1][0][1] = "　■■　　■■　";
+    player.shape[1][0][2] = "■　　　　　　■";
+    player.shape[1][0][3] = "■　　　　　　■";
+    player.shape[1][0][4] = "■　　　　　■■";
+    player.shape[1][0][5] = "■　　■■■　■";
+    player.shape[1][0][6] = "■　■　　　　■";
+    player.shape[1][0][7] = "　■　　■　■　";
+    player.shape[1][0][8] = "　　■　　　　■";
+    player.shape[1][0][9] = "　　■■■■■　";
+    player.shape[1][0][10] = "　　■　　　　■";
+    player.shape[1][0][11] = "　　■　■■　■";
+    player.shape[1][0][12] = "　　　■　　■　";
+
+    // 자세 1: 살짝 눌림
+    player.shape[1][1][0] = "　　　　　　　　";
+    player.shape[1][1][1] = "　　　■■　　　";
+    player.shape[1][1][2] = "　■■　　■■　";
+    player.shape[1][1][3] = "■　　　　　　■";
+    player.shape[1][1][4] = "■　　　　　■■";
+    player.shape[1][1][5] = "■　　■■■　■";
+    player.shape[1][1][6] = "■　■　　　　■";
+    player.shape[1][1][7] = "　■　　■　■　";
+    player.shape[1][1][8] = "　　■　　　　■";
+    player.shape[1][1][9] = "　　■■■■■　";
+    player.shape[1][1][10] = "　　■　　　　■";
+    player.shape[1][1][11] = "　　■　■■　■";
+    player.shape[1][1][12] = "　　　■　　■　";
+
+    // 자세 2: 몸까지 눌림
+    player.shape[1][2][0] = "　　　　　　　　";
+    player.shape[1][2][1] = "　　　■■　　　";
+    player.shape[1][2][2] = "　■■　　■■　";
+    player.shape[1][2][3] = "■　　　　　　■";
+    player.shape[1][2][4] = "■　　　　　　■";
+    player.shape[1][2][5] = "■　　　　　■■";
+    player.shape[1][2][6] = "■　　■■■　■";
+    player.shape[1][2][7] = "■　■　　　　■";
+    player.shape[1][2][8] = "　■　　■　■　";
+    player.shape[1][2][9] = "　　■　　　　■";
+    player.shape[1][2][10] = "　　■■■■■　";
+    player.shape[1][2][11] = "　　■　■■　■";
+    player.shape[1][2][12] = "　　　■　　■　";
+
+#pragma endregion
+
+#pragma region 뒤
+    // 자세 0: 기본
+    player.shape[2][0][0] = "　　　　■■　　";
+    player.shape[2][0][1] = "　■■■　　■　";
+    player.shape[2][0][2] = "■　　　　　　■";
+    player.shape[2][0][3] = "■　　　　　　■";
+    player.shape[2][0][4] = "■　　　　　　■";
+    player.shape[2][0][5] = "■　　　　　　■";
+    player.shape[2][0][6] = "■　　　　　　■";
+    player.shape[2][0][7] = "■　　　　　　■";
+    player.shape[2][0][8] = "　■　　　　■　";
+    player.shape[2][0][9] = "■　■■■■　■";
+    player.shape[2][0][10] = "■　　　　　　■";
+    player.shape[2][0][11] = "　■　■■　■　";
+    player.shape[2][0][12] = "　■■　　■■　";
+
+    // 자세 1: 살짝 눌림
+    player.shape[2][1][0] = "　　　　　　　　";
+    player.shape[2][1][1] = "　　　　■■　　";
+    player.shape[2][1][2] = "　■■■　　■　";
+    player.shape[2][1][3] = "■　　　　　　■";
+    player.shape[2][1][4] = "■　　　　　　■";
+    player.shape[2][1][5] = "■　　　　　　■";
+    player.shape[2][1][6] = "■　　　　　　■";
+    player.shape[2][1][7] = "■　　　　　　■";
+    player.shape[2][1][8] = "　■　　　　■　";
+    player.shape[2][1][9] = "■　■■■■　■";
+    player.shape[2][1][10] = "■　　　　　　■";
+    player.shape[2][1][11] = "　■　■■　■　";
+    player.shape[2][1][12] = "　■■　　■■　";
+
+    // 자세 2: 몸까지 눌림
+    player.shape[2][2][0] = "　　　　　　　　";
+    player.shape[2][2][1] = "　　　　■■　　";
+    player.shape[2][2][2] = "　■■■　　■　";
+    player.shape[2][2][3] = "■　　　　　　■";
+    player.shape[2][2][4] = "■　　　　　　■";
+    player.shape[2][2][5] = "■　　　　　　■";
+    player.shape[2][2][6] = "■　　　　　　■";
+    player.shape[2][2][7] = "■　　　　　　■";
+    player.shape[2][2][8] = "■　　　　　　■";
+    player.shape[2][2][9] = "　■　　　　■　";
+    player.shape[2][2][10] = "■　■■■■　■";
+    player.shape[2][2][11] = "　■　■■　■　";
+    player.shape[2][2][12] = "　■■　　■■　";
+
+#pragma endregion
+
+#pragma region 앞
+    // 자세 0: 기본
+    player.shape[3][0][0] = "　　■■　　　　";
+    player.shape[3][0][1] = "　■　　■■■　";
+    player.shape[3][0][2] = "■　　　　　　■";
+    player.shape[3][0][3] = "■　　　　　　■";
+    player.shape[3][0][4] = "■　　　　■　■";
+    player.shape[3][0][5] = "■　■■■　■■";
+    player.shape[3][0][6] = "■■　　　　■■";
+    player.shape[3][0][7] = "■　■　　■　■";
+    player.shape[3][0][8] = "　■　　　　■　";
+    player.shape[3][0][9] = "■■■■■■■■";
+    player.shape[3][0][10] = "■　　　　　　■";
+    player.shape[3][0][11] = "　■　■■　■　";
+    player.shape[3][0][12] = "　■■　　■■　";
+
+    // 자세 1: 살짝 눌림
+    player.shape[3][1][0] = "　　　　　　　　";
+    player.shape[3][1][1] = "　　■■　　　　";
+    player.shape[3][1][2] = "　■　　■■■　";
+    player.shape[3][1][3] = "■　　　　　　■";
+    player.shape[3][1][4] = "■　　　　■　■";
+    player.shape[3][1][5] = "■　■■■　■■";
+    player.shape[3][1][6] = "■■　　　　■■";
+    player.shape[3][1][7] = "■　■　　■　■";
+    player.shape[3][1][8] = "　■　　　　■　";
+    player.shape[3][1][9] = "■■■■■■■■";
+    player.shape[3][1][10] = "■　　　　　　■";
+    player.shape[3][1][11] = "　■　■■　■　";
+    player.shape[3][1][12] = "　■■　　■■　";
+
+    // 자세 2: 몸까지 눌림
+    player.shape[3][2][0] = "　　　　　　　　";
+    player.shape[3][2][1] = "　　■■　　　　";
+    player.shape[3][2][2] = "　■　　■■■　";
+    player.shape[3][2][3] = "■　　　　　　■";
+    player.shape[3][2][4] = "■　　　　　　■";
+    player.shape[3][2][5] = "■　　　　■　■";
+    player.shape[3][2][6] = "■　■■■　■■";
+    player.shape[3][2][7] = "■■　　　　■■";
+    player.shape[3][2][8] = "■　■　　■　■";
+    player.shape[3][2][9] = "　■　　　　■　";
+    player.shape[3][2][10] = "■■■■■■■■";
+    player.shape[3][2][11] = "　■　■■　■　";
+    player.shape[3][2][12] = "　■■　　■■　";
+
+#pragma endregion
+
+
 }
 
-void MenuInit()
+void PlayerUpdate()
 {
-    arrow.x = 15;
-    arrow.y = 25;
-    arrow.color = LIGHT_RED;
-    arrow.shape = "▶";
 
-    for (int i = 0; i < MENU_COUNT; i++)
+    player.ani = (GetTickCount64() / 250) % 3;
+
+
+    if (GetAsyncKeyState(VK_LEFT))
     {
-        menus[i].x = 18;
-        menus[i].y = 25 + 2 * i;
-        menus[i].color = LIGHT_WHITE;
+        player.x--;  
+        player.dir = LEFT;
+    }
+    if (GetAsyncKeyState(VK_RIGHT))
+    {
+        player.x++;
+        player.dir = RIGHT;
+    }
+    if (GetAsyncKeyState(VK_UP))
+    {
+        player.y--;
+        player.dir = UP;
+    }
+    if (GetAsyncKeyState(VK_DOWN))
+    {
+        player.y++;
+        player.dir = DOWN;
     }
 
-    menus[0].color = LIGHT_RED;
-
-    menus[0].shape = "Continue";
-    menus[1].shape = "NewGame";
-    menus[2].shape = "Setting";
-    menus[3].shape = "Exit";
-}
-
-void MenuUpdate()
-{
-    if (GetAsyncKeyState(VK_UP) & 0x8000)
+    for (int i = 0; i < 13; i++)
     {
-        if (arrow.y > 25)
-        {
-            arrow.y -= 2;
-            int id = menuID;     //id 이전
-            menus[id].color = LIGHT_WHITE; 
-            id--;                //id 지금
-            menus[id].color = LIGHT_RED;
-            menuID = (MENU_ID)id;
-        }
-    }
-
-
-    if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-    {
-        if (arrow.y < 31)
-        {
-            arrow.y += 2;
-            int id = menuID;   //id 이전 //0
-            menus[id].color = LIGHT_WHITE;  //menus[0] = 흰색
-            id++;              //id 지금     //id == 1
-            menus[id].color = LIGHT_RED;    //menus[1] = 빨간색;
-            menuID = (MENU_ID)id;       //menuID = (MENU_ID) id(1);
-        }
-            
-    }
-
-    if (GetAsyncKeyState(VK_RETURN))
-    {
-        switch (menuID)
-        {
-        case CONTINUE:
-            sceneID = STAGE;
-            break;
-        case NEWGAME:
-            StageInit();
-            sceneID = STAGE;
-            break;
-        case UTILITY:
-            sceneID = UTILL;
-            break;
-        case EXIT:
-            exit(true);
-            break;
-        default:
-            break;
-        }
-    }
-
-    SetPosition(arrow.x, arrow.y);
-    ChangeColor(arrow.color);
-    printf(arrow.shape);
-
-
-    for (int i = 0; i < MENU_COUNT; i++)
-    {
-        SetPosition(menus[i].x, menus[i].y);
-        ChangeColor(menus[i].color);
-        printf(menus[i].shape);
+        WriteBuffer(player.x, player.y + i, player.color, player.shape[player.dir][player.ani][i]);
     }
 
 }
 
+#pragma endregion
 
-void StageInit() {}
-void StageUpdate()
+
+
+#pragma region 더블버퍼
+
+
+void InitBuffer()
 {
-    SetPosition(10, 10);
-    printf("STAGE");
+    screenIndex = 0;
+    COORD size = { BufferWidth, BufferHeight };
+    SMALL_RECT rect = { 0, 0, BufferWidth, BufferHeight };
+
+    hBuffer[0] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
+    SetConsoleScreenBufferSize(hBuffer[0], size);
+    SetConsoleWindowInfo(hBuffer[0], TRUE, &rect);
+
+    hBuffer[1] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
+    SetConsoleScreenBufferSize(hBuffer[1], size);
+    SetConsoleWindowInfo(hBuffer[1], TRUE, &rect);
+
+    CONSOLE_CURSOR_INFO info;
+    info.bVisible = false;
+    info.dwSize = 1;
+
+    SetConsoleCursorInfo(hBuffer[0], &info);
+    SetConsoleCursorInfo(hBuffer[1], &info);
+
 }
 
-void UtillUpdate()
+void FlipBuffer()
 {
-    SetPosition(10, 10);
-    printf("UTILL");
+    SetConsoleActiveScreenBuffer(hBuffer[screenIndex]);
+    screenIndex = !screenIndex;
 }
 
+void ClearBuffer()
+{
+    COORD pos = { 0, 0 };
+    DWORD dw;
+    FillConsoleOutputCharacter(hBuffer[screenIndex], ' ', BufferWidth * BufferHeight, pos, &dw);
+}
+
+void CloseBuffer()
+{
+    CloseHandle(hBuffer[0]);
+    CloseHandle(hBuffer[1]);
+}
+
+void WriteBuffer(int x, int y, Color color, const char* shape)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+
+    COORD pos{ x * 2, y };
+    SetConsoleCursorPosition(hBuffer[screenIndex], pos);
+
+    DWORD dw;
+    WriteFile(hBuffer[screenIndex], shape, strlen(shape), &dw, NULL);
+
+}
+
+#pragma endregion
