@@ -34,6 +34,7 @@ enum Dir
 #pragma region 구조체
 struct Obj
 {
+    bool act;
     Dir dir;
     int x;
     int y;
@@ -127,6 +128,8 @@ void PlayerInit()
     player.y = 10;
     player.color = LIGHT_WHITE;
 
+#pragma region 플레이어 이미지들
+
 #pragma region 왼쪽
     // 자세 0: 기본
     player.shape[0][0][0] = "　　　■■　　　";
@@ -173,8 +176,7 @@ void PlayerInit()
     player.shape[0][2][11] = "■　■■　■　　";
     player.shape[0][2][12] = "　■　　■　　　";
 
-#pragma endregion
-
+#pragma endregion                                                           
 #pragma region 오른쪽
     // 자세 0: 기본
     player.shape[1][0][0] = "　　　■■　　　";
@@ -222,7 +224,6 @@ void PlayerInit()
     player.shape[1][2][12] = "　　　■　　■　";
 
 #pragma endregion
-
 #pragma region 뒤
     // 자세 0: 기본
     player.shape[2][0][0] = "　　　　■■　　";
@@ -270,7 +271,6 @@ void PlayerInit()
     player.shape[2][2][12] = "　■■　　■■　";
 
 #pragma endregion
-
 #pragma region 앞
     // 자세 0: 기본
     player.shape[3][0][0] = "　　■■　　　　";
@@ -318,7 +318,6 @@ void PlayerInit()
     player.shape[3][2][12] = "　■■　　■■　";
 
 #pragma endregion
-
 #pragma region 왼쪽
     // 프레임 3: 걷기 한쪽 발 들기
     player.shape[0][3][0] = "　　　■■　　　";
@@ -381,7 +380,6 @@ void PlayerInit()
     player.shape[0][6][12] = "　■　　■　　　";
 
 #pragma endregion
-
 #pragma region 오른쪽
     // 프레임 3: 걷기 한쪽 발 들기
     player.shape[1][3][0] = "　　　■■　　　";
@@ -444,7 +442,6 @@ void PlayerInit()
     player.shape[1][6][12] = "　　　■　　■　";
 
 #pragma endregion
-
 #pragma region 뒤
     // 프레임 3: 걷기 한쪽 발 들기
     player.shape[2][3][0] = "　　　　■■　　";
@@ -507,7 +504,6 @@ void PlayerInit()
     player.shape[2][6][12] = "　■■　　■■　";
 
 #pragma endregion
-
 #pragma region 앞
     // 프레임 3: 걷기 첫 번째 접지
     player.shape[3][3][0] = "　　　　　　　　";
@@ -570,9 +566,8 @@ void PlayerInit()
     player.shape[3][6][12] = "　　　　　■■　";
 
 #pragma endregion
+#pragma endregion
 }
-
-
 
 void PlayerUpdate()
 {
@@ -633,11 +628,13 @@ void SlimeInit()
 {
     for (int i = 0; i < SlimeCount; i++)
     {
+        slimes[i].act = true;
         slimes[i].x = rand() % 120;
-        slimes[i].y = rand() % 90;
+        slimes[i].y = rand() % 80;
         slimes[i].color = (Color)(rand() % 7 + 9);
         slimes[i].dir = (Dir)(rand() % 2);
 
+#pragma region 슬라임 이미지들
 #pragma region 왼쪽
         // 프레임 0: idle 기본
         slimes[i].shape[0][0][0] = "";
@@ -1069,10 +1066,12 @@ void SlimeInit()
         slimes[i].shape[3][6][12] = "　■■■■■■　";
 
 #pragma endregion
-
+#pragma endregion
     }
 
 }
+
+
 int slimeTime = 0;
 
 void SlimeUpdate()
@@ -1082,29 +1081,48 @@ void SlimeUpdate()
     {
         for (int i = 0; i < SlimeCount; i++)
         {
-            if (slimes[i].dir == LEFT && slimes[i].x <= 0)
+            if (slimes[i].act == false)
             {
-                slimes[i].dir = RIGHT;
+                slimes[i].act = true;
+                slimes[i].x = rand() % 120;
+                slimes[i].y = rand() % 80;
+                slimes[i].color = (Color)(rand() % 7 + 9);
+                slimes[i].dir = (Dir)(rand() % 2);
             }
+        }
 
 
-            if (slimes[i].dir == RIGHT && slimes[i].x >= 142)
+        for (int i = 0; i < SlimeCount; i++)
+        {
+
+            if (slimes[i].act)
             {
-                slimes[i].dir = LEFT;
-            }
 
-            switch (slimes[i].dir)
-            {
-            case LEFT:
-                slimes[i].x--;
-                break;
-            case RIGHT:
-                slimes[i].x++;
-                break;
+                if (slimes[i].dir == LEFT && slimes[i].x <= 0)
+                {
+                    slimes[i].dir = RIGHT;
+                }
 
-            default:
-                break;
+
+                if (slimes[i].dir == RIGHT && slimes[i].x >= 142)
+                {
+                    slimes[i].dir = LEFT;
+                }
+
+                switch (slimes[i].dir)
+                {
+                case LEFT:
+                    slimes[i].x--;
+                    break;
+                case RIGHT:
+                    slimes[i].x++;
+                    break;
+
+                default:
+                    break;
+                }
             }
+          
         }
         slimeTime = 0;
     }
@@ -1117,17 +1135,30 @@ void SlimeUpdate()
     {
         for (int j = 0; j < 13; j++)
         {
-            if (isWalk)
+            if (slimes[i].act)
             {
-                slimes[i].ani = (GetTickCount64() / 250) % 4;
-                WriteBuffer(slimes[i].x, slimes[i].y + j, slimes[i].color, slimes[i].shape[slimes[i].dir][slimes[i].ani + 3][j]);
-            }
-            else
-            {
-                slimes[i].ani = (GetTickCount64() / 250) % 3;
-                WriteBuffer(slimes[i].x, slimes[i].y + j, slimes[i].color, slimes[i].shape[slimes[i].dir][slimes[i].ani][j]);
+
+                if (isWalk)
+                {
+                    slimes[i].ani = (GetTickCount64() / 250) % 4;
+                    WriteBuffer(slimes[i].x, slimes[i].y + j, slimes[i].color, slimes[i].shape[slimes[i].dir][slimes[i].ani + 3][j]);
+                }
+                else
+                {
+                    slimes[i].ani = (GetTickCount64() / 250) % 3;
+                    WriteBuffer(slimes[i].x, slimes[i].y + j, slimes[i].color, slimes[i].shape[slimes[i].dir][slimes[i].ani][j]);
+                }
             }
 
+        }
+
+
+        if (slimes[i].x < player.x + 8     &&
+            player.x    < slimes[i].x + 8  &&
+            slimes[i].y + 4 < player.y + 13    &&
+            player.y    < slimes[i].y + 13)
+        {
+            slimes[i].act = false;
         }
     }
 
