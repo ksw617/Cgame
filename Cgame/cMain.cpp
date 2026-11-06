@@ -629,6 +629,41 @@ void PlayerUpdate()
         isWalk = true;
     }
 
+    if (GetAsyncKeyState(VK_SPACE))
+    {
+
+        switch (player.dir)
+        {         
+        case LEFT:
+            for (int i = 0; i < 5; i++)
+            {
+                WriteBuffer(player.x - 5, player.y + i + 6, player.color, "¡á¡á¡á¡á¡á");
+            }
+            break;
+        case RIGHT:
+            for (int i = 0; i < 5; i++)
+            {
+                WriteBuffer(player.x + 8, player.y + i + 6, player.color, "¡á¡á¡á¡á¡á");
+            }
+            break;
+        case UP:
+            for (int i = 0; i < 5; i++)
+            {
+                WriteBuffer(player.x + 2, player.y + i - 5, player.color, "¡á¡á¡á¡á");
+            }
+            break;
+        case DOWN:
+            for (int i = 0; i < 5; i++)
+            {
+                WriteBuffer(player.x + 2, player.y + i + 13, player.color, "¡á¡á¡á¡á");
+            }
+            break;
+        default:
+            break;
+        }
+
+    }
+
     for (int i = 0; i < 13; i++)
     {
         if (isWalk)
