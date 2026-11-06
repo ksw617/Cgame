@@ -34,6 +34,7 @@ enum Dir
 #pragma region ±¸Á¶Ã¼
 struct Obj
 {
+    int killMark;
     int lv;
     int hp;
     int maxHp;
@@ -127,6 +128,7 @@ int main()
 
 void PlayerInit()
 {
+    player.killMark = 0;
     player.lv = 1;
     player.maxHp = player.lv * 100;
     player.hp = player.maxHp;
@@ -575,27 +577,52 @@ void PlayerInit()
 #pragma endregion
 }
 
-bool IsCollision(Obj target, int left, int right, int top, int bottom)
+bool IsCollision(int left, int right, int top, int bottom)
 {
+    bool isCollision = false;
 
-    for (int y = top; y < bottom; y++)
+    for (int i = 0; i < SlimeCount; i++)
     {
-        for (int x = left; x < right; x++)
+        if (slimes[i].act)
         {
-            WriteBuffer(x, y, LIGHT_GREEN, "¡á");
+
+            if (slimes[i].x < right &&
+                left < slimes[i].x + 8 &&
+                slimes[i].y + 4 < bottom &&
+                top < slimes[i].y + 13)
+            {
+                slimes[i].act = false;
+                isCollision = true;
+                break;
+            }
+          
         }
     }
 
-    if (target.x < right &&
-        left < target.x + 8 &&
-        target.y + 4 < bottom &&
-        top < target.y + 13)
+    if (isCollision)
     {
-        return true;
+        for (int y = top; y < bottom; y++)
+        {
+            for (int x = left; x < right; x++)
+            {
+                WriteBuffer(x, y, GREEN, "¡á");
+            }
+        }
+
+    }
+    else
+    {
+        for (int y = top; y < bottom; y++)
+        {
+            for (int x = left; x < right; x++)
+            {
+                WriteBuffer(x, y, RED, "¡á");
+            }
+        }
     }
 
 
-    return false;
+    return isCollision;
 }
 
 void PlayerUpdate()
@@ -658,54 +685,38 @@ void PlayerUpdate()
         switch (player.dir)
         {         
         case LEFT:
-            for (int i = 0; i < SlimeCount; i++)
+
+            if (IsCollision(player.x - 5, player.x, player.y + 6, player.y + 6 + 5))
             {
-                if (slimes[i].act)
-                {
-                    if (IsCollision(slimes[i], player.x - 5, player.x, player.y + 6, player.y + 6 + 5))
-                    {
-                        slimes[i].act = false;
-                    }
-                }
+                player.killMark++;
             }
+ 
             break;
         case RIGHT:
 
-            for (int i = 0; i < SlimeCount; i++)
-            {
-                if (slimes[i].act)
-                {
-                    if (IsCollision(slimes[i], player.x + 8, player.x + 8 + 5, player.y + 6, player.y + 6 + 5))
+
+                    if (IsCollision(player.x + 8, player.x + 8 + 5, player.y + 6, player.y + 6 + 5))
                     {
-                        slimes[i].act = false;
+                        player.killMark++;
                     }
-                }
-            }
+      
             break;
         case UP:
 
-            for (int i = 0; i < SlimeCount; i++)
-            {
-                if (slimes[i].act)
-                {
-                    if (IsCollision(slimes[i], player.x + 2, player.x + 2 + 5, player.y -5, player.y))
+
+                    if (IsCollision(player.x + 2, player.x + 2 + 5, player.y -5, player.y))
                     {
-                        slimes[i].act = false;
+                        player.killMark++;
                     }
-                }
-            }
+       
             break;
         case DOWN:
-            for (int i = 0; i < SlimeCount; i++)
-            {
-                if (slimes[i].act)
-                {
-                    if (IsCollision(slimes[i], player.x + 2, player.x + 2 + 5, player.y + 13, player.y + 13 + 5))
+
+                    if (IsCollision(player.x + 2, player.x + 2 + 5, player.y + 13, player.y + 13 + 5))
                     {
-                        slimes[i].act = false;
+                        player.killMark++;
                     }
-                }
-            }
+   
             break;
         default:
             break;
