@@ -34,6 +34,9 @@ enum Dir
 #pragma region ±¸Á¶Ã¼
 struct Obj
 {
+    int lv;
+    int hp;
+    int maxHp;
     bool act;
     Dir dir;
     int x;
@@ -124,6 +127,9 @@ int main()
 
 void PlayerInit()
 {
+    player.lv = 1;
+    player.maxHp = player.lv * 100;
+    player.hp = player.maxHp;
     player.x = 10;
     player.y = 10;
     player.color = LIGHT_WHITE;
@@ -572,13 +578,17 @@ void PlayerInit()
 void PlayerUpdate()
 {
 
-
     bool isWalk = false;
 
     if (GetAsyncKeyState(VK_LEFT))
     {
         player.x--;  
         player.dir = LEFT;
+
+        if (player.x < 0)
+        {
+            player.x++;
+        }
 
         isWalk = true;
     }
@@ -587,6 +597,11 @@ void PlayerUpdate()
         player.x++;
         player.dir = RIGHT;
 
+        if (player.x > 142)
+        {
+            player.x--;
+        }
+
         isWalk = true;
     }
     if (GetAsyncKeyState(VK_UP))
@@ -594,12 +609,22 @@ void PlayerUpdate()
         player.y--;
         player.dir = UP;
 
+        if (player.y < 5)
+        {
+            player.y++;
+        }
+
         isWalk = true;
     }
     if (GetAsyncKeyState(VK_DOWN))
     {
         player.y++;
         player.dir = DOWN;
+
+        if (player.y > 87)
+        {
+            player.y--;
+        }
 
         isWalk = true;
     }
@@ -619,6 +644,46 @@ void PlayerUpdate()
        
     }
 
+    const char* heart[5] = {
+        "¡¡¡á¡á¡¡¡á¡á¡¡",
+        "¡á¡á¡á¡á¡á¡á¡á",
+        "¡¡¡á¡á¡á¡á¡á¡¡",
+        "¡¡¡¡¡á¡á¡á¡¡¡¡",
+        "¡¡¡¡¡¡¡á¡¡¡¡¡¡"
+    };
+    
+    for (int i = 0; i < 5; i++)
+    {
+        WriteBuffer(1, i, LIGHT_RED, heart[i]);
+    }
+
+    for (int i = 0; i < 50; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            WriteBuffer(i + 10, j + 1, LIGHT_GRAY, "¡á");
+        }
+      
+    }
+
+    float HpRatio = (float)player.hp / (float)player.maxHp;
+
+    if (HpRatio <= 0)
+    {
+        exit(true);
+    }
+
+    float currentHP = 50.f * HpRatio;
+
+
+    for (int i = 0; i < currentHP; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            WriteBuffer(i + 10, j + 1, LIGHT_RED, "¡á");
+        }
+
+    }
 }
 
 #pragma endregion
@@ -1165,13 +1230,19 @@ void SlimeUpdate()
         }
 
 
-        if (slimes[i].x < player.x + 8     &&
-            player.x    < slimes[i].x + 8  &&
-            slimes[i].y + 4 < player.y + 13    &&
-            player.y    < slimes[i].y + 13)
+        if (slimes[i].act)
         {
-            slimes[i].act = false;
+            if (slimes[i].x < player.x + 8 &&
+                player.x < slimes[i].x + 8 &&
+                slimes[i].y + 4 < player.y + 13 &&
+                player.y < slimes[i].y + 13)
+            {
+                slimes[i].act = false;
+                player.hp -= 10;
+            }
         }
+
+
     }
 
    
