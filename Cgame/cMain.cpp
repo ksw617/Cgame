@@ -575,6 +575,29 @@ void PlayerInit()
 #pragma endregion
 }
 
+bool IsCollision(Obj target, int left, int right, int top, int bottom)
+{
+
+    for (int y = top; y < bottom; y++)
+    {
+        for (int x = left; x < right; x++)
+        {
+            WriteBuffer(x, y, LIGHT_GREEN, "¡á");
+        }
+    }
+
+    if (target.x < right &&
+        left < target.x + 8 &&
+        target.y + 4 < bottom &&
+        top < target.y + 13)
+    {
+        return true;
+    }
+
+
+    return false;
+}
+
 void PlayerUpdate()
 {
 
@@ -635,27 +658,53 @@ void PlayerUpdate()
         switch (player.dir)
         {         
         case LEFT:
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < SlimeCount; i++)
             {
-                WriteBuffer(player.x - 5, player.y + i + 6, player.color, "¡á¡á¡á¡á¡á");
+                if (slimes[i].act)
+                {
+                    if (IsCollision(slimes[i], player.x - 5, player.x, player.y + 6, player.y + 6 + 5))
+                    {
+                        slimes[i].act = false;
+                    }
+                }
             }
             break;
         case RIGHT:
-            for (int i = 0; i < 5; i++)
+
+            for (int i = 0; i < SlimeCount; i++)
             {
-                WriteBuffer(player.x + 8, player.y + i + 6, player.color, "¡á¡á¡á¡á¡á");
+                if (slimes[i].act)
+                {
+                    if (IsCollision(slimes[i], player.x + 8, player.x + 8 + 5, player.y + 6, player.y + 6 + 5))
+                    {
+                        slimes[i].act = false;
+                    }
+                }
             }
             break;
         case UP:
-            for (int i = 0; i < 5; i++)
+
+            for (int i = 0; i < SlimeCount; i++)
             {
-                WriteBuffer(player.x + 2, player.y + i - 5, player.color, "¡á¡á¡á¡á");
+                if (slimes[i].act)
+                {
+                    if (IsCollision(slimes[i], player.x + 2, player.x + 2 + 5, player.y -5, player.y))
+                    {
+                        slimes[i].act = false;
+                    }
+                }
             }
             break;
         case DOWN:
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < SlimeCount; i++)
             {
-                WriteBuffer(player.x + 2, player.y + i + 13, player.color, "¡á¡á¡á¡á");
+                if (slimes[i].act)
+                {
+                    if (IsCollision(slimes[i], player.x + 2, player.x + 2 + 5, player.y + 13, player.y + 13 + 5))
+                    {
+                        slimes[i].act = false;
+                    }
+                }
             }
             break;
         default:
