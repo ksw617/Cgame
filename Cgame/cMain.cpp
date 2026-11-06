@@ -628,7 +628,7 @@ void SlimeInit()
 {
     for (int i = 0; i < SlimeCount; i++)
     {
-        slimes[i].act = true;
+        slimes[i].act = false;
         slimes[i].x = rand() % 120;
         slimes[i].y = rand() % 80;
         slimes[i].color = (Color)(rand() % 7 + 9);
@@ -1073,23 +1073,35 @@ void SlimeInit()
 
 
 int slimeTime = 0;
+int spawnTime = 0;
+int maxSpawnTime = rand() % 50;
 
 void SlimeUpdate()
 {
     slimeTime++;
     if (slimeTime > 2)
     {
-        for (int i = 0; i < SlimeCount; i++)
+
+        spawnTime++;
+
+        if (spawnTime > maxSpawnTime)
         {
-            if (slimes[i].act == false)
+            for (int i = 0; i < SlimeCount; i++)
             {
-                slimes[i].act = true;
-                slimes[i].x = rand() % 120;
-                slimes[i].y = rand() % 80;
-                slimes[i].color = (Color)(rand() % 7 + 9);
-                slimes[i].dir = (Dir)(rand() % 2);
+                if (slimes[i].act == false)
+                {
+                    slimes[i].act = true;
+                    slimes[i].x = rand() % 120;
+                    slimes[i].y = rand() % 80;
+                    slimes[i].color = (Color)(rand() % 7 + 9);
+                    slimes[i].dir = (Dir)(rand() % 2);
+                    break;
+                }
             }
+            maxSpawnTime = rand() % 50;
+            spawnTime = 0;
         }
+      
 
 
         for (int i = 0; i < SlimeCount; i++)
